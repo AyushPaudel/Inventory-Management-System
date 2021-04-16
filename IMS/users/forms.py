@@ -7,3 +7,4 @@ class imsUserCreationForm(UserCreationForm):
     class Meta:
         model = imsUser
         fields = "__all__"
+        
