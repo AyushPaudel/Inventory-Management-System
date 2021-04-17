@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import MyTokenObtainPairSerializer, registerSerializer, \
-                        changePasswordSerializer
+                        changePasswordSerializer, updateProfileSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
@@ -35,4 +35,8 @@ class changePasswordView(generics.UpdateAPIView):
     serializer_class = changePasswordSerializer
 
 
+class updateProfileView(generics.UpdateAPIView):
 
+    queryset = imsUser.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = updateProfileSerializer
