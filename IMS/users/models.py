@@ -16,7 +16,7 @@ class imsUser(AbstractUser):
 
     address = models.CharField(max_length=100, blank=True)
     is_employee = models.BooleanField(default=False, blank=False)
-    is_customer = models.BooleanField(default=True, blank=False)
+    is_customer = models.BooleanField(default=True, blank=True)
 
     def __str__(self):
         return self.username
