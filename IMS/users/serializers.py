@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-
+"""
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
@@ -13,15 +13,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['username'] = user.username
         return token
-
+"""
 
 class registerSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=imsUser.objects.all())]
+        required=True,
+        validators=[UniqueValidator(queryset=imsUser.objects.all())]
     )
 
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
@@ -31,7 +32,7 @@ class registerSerializer(serializers.ModelSerializer):
                   'name', 'Landline_number',
                   'mobile_number', 'address',
                   'is_employee', 'is_customer',
-                )
+                  )
         extra_kwargs = {
             'name': {'required': True},
             'address': {'required': True},
@@ -41,10 +42,11 @@ class registerSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match!"})
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match!"})
 
         return attrs
-    
+
     def create(self, validated_data):
         user = imsUser.objects.create(
             username=validated_data.get('username'),
@@ -64,10 +66,10 @@ class registerSerializer(serializers.ModelSerializer):
 
 
 class changePasswordSerializer(serializers.ModelSerializer):
-    new_password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    new_password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
     new_password2 = serializers.CharField(write_only=True, required=True)
     old_password = serializers.CharField(write_only=True, required=True)
-
 
     class Meta:
         model = imsUser
@@ -75,14 +77,16 @@ class changePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['new_password'] != attrs['new_password2']:
-            raise serializers.ValidationError({"new_password": "Password fields didn't match"})
+            raise serializers.ValidationError(
+                {"new_password": "Password fields didn't match"})
 
         return attrs
 
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError({"old_password": "Old password not correct!"})
+            raise serializers.ValidationError(
+                {"old_password": "Old password not correct!"})
         return value
 
     def update(self, instance, validated_data):
@@ -113,13 +117,15 @@ class updateProfileSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         user = self.context['request'].user
         if imsUser.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError({"email": "This Email already in use!"})
+            raise serializers.ValidationError(
+                {"email": "This Email already in use!"})
         return value
 
     def validate_username(self, value):
         user = self.context['request'].user
         if imsUser.objects.exclude(pk=user.pk).filter(username=value).exists():
-            raise serializers.ValidationError({"username": "This username already exists!"})
+            raise serializers.ValidationError(
+                {"username": "This username already exists!"})
         return value
 
     def update(self, instance, validated_data):
@@ -127,13 +133,16 @@ class updateProfileSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You don't have permission to update profile for this user!"})
+            raise serializers.ValidationError(
+                {"authorize": "You don't have permission to update profile for this user!"})
 
         instance.username = validated_data.get('username')
         instance.email = validated_data.get('email')
         instance.name = validated_data.get('name')
-        instance.Landline_number = validated_data.get('Landline_number', '+000000000')
-        instance.mobile_number = validated_data.get('mobile_number', '+9999999999')
+        instance.Landline_number = validated_data.get(
+            'Landline_number', '+000000000')
+        instance.mobile_number = validated_data.get(
+            'mobile_number', '+9999999999')
         instance.address = validated_data.get('address')
         instance.is_employee = validated_data.get('is_employee')
         instance.is_customer = validated_data.get('is_customer')
