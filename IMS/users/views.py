@@ -1,14 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import registerSerializer, \
-                        changePasswordSerializer, updateProfileSerializer
+from .serializers import registerSerializer, changePasswordSerializer,\
+                         updateProfileSerializer, logoutSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 # Create your views here.
 
 
@@ -47,18 +48,15 @@ class updateProfileView(generics.UpdateAPIView):
 
 class logoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = logoutSerializer
 
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-            
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class logoutAllView(APIView):
     permission_classes = (IsAuthenticated,)
