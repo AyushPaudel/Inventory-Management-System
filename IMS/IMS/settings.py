@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     #my apps:
-    'users',
+    'users.apps.UsersConfig',
+    'products.apps.ProductConfig'
 ]
 
 MIDDLEWARE = [
