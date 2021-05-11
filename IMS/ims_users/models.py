@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 # Create your models here.
 
 
+
 class imsUser(AbstractUser):
     name = models.CharField(max_length=100, blank=False, default="")
 
@@ -19,8 +20,8 @@ class imsUser(AbstractUser):
     address = models.CharField(max_length=100, blank=True)
 
     # user types
-    user_type_choices = ((1, "Admin"), (2, "Staff"),
-                         (3, "Customer"))
+    user_type_choices = [(1, "Admin"), (2, "Staff"),
+                         (3, "Customer")]
     user_type = models.CharField(
         max_length=255, choices=user_type_choices, default=1)
 
