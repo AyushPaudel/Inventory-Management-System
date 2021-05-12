@@ -26,8 +26,7 @@ class imsUserAdmin(UserAdmin):
                 {
                     'fields':
                     (
-                        'is_employee',
-                        'is_customer',
+                        'user_type',
                     )
                 }
             )
