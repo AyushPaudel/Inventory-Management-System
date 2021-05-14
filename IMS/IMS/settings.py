@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-mxzo!-=jqvjps6nfcz7vgl!mzl03mloz@z__6^k9wb4uc8c7xj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://voidash.pythonanywhere.com/']
 
 
 # Application definition
