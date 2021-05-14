@@ -33,7 +33,7 @@ class registerSerializer(serializers.ModelSerializer):
                   'password2', 'email',
                   'name', 'Landline_number',
                   'mobile_number', 'address',
-                  'is_employee', 'is_customer',
+                  'user_type'
                   )
         extra_kwargs = {
             'name': {'required': True},
@@ -57,8 +57,7 @@ class registerSerializer(serializers.ModelSerializer):
             Landline_number=validated_data.get('Landline_number', '000000000'),
             mobile_number=validated_data.get('mobile_number', '000000000'),
             address=validated_data.get('address'),
-            is_employee=validated_data.get('is_employee'),
-            is_customer=validated_data.get('is_customer'),
+            user_type=validated_data.get('user_type'),
         )
 
         user.set_password(validated_data['password'])
@@ -106,7 +105,7 @@ class updateProfileSerializer(serializers.ModelSerializer):
         fields = ('username', 'email',
                   'name', 'Landline_number',
                   'mobile_number', 'address',
-                  'is_employee', 'is_customer',
+                  'user_type'
                   )
 
         extra_kwargs = {

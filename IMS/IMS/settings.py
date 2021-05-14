@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-mxzo!-=jqvjps6nfcz7vgl!mzl03mloz@z__6^k9wb4uc8c7xj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://voidash.pythonanywhere.com/']
+ALLOWED_HOSTS = ['voidash.pythonanywhere.com/','localhost']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
     #my apps:
     'ims_users',
