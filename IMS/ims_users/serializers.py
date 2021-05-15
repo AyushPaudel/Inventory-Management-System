@@ -40,6 +40,7 @@ class registerSerializer(serializers.ModelSerializer):
             'address': {'required': True},
             'Landline_number': {'required': False},
             'mobile_number': {'required': False},
+            'user_type': {'required': True},
         }
 
     def validate(self, attrs):
