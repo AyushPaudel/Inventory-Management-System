@@ -23,18 +23,21 @@ class addCategory(serializers.ModelSerializer):
     #     validators=[UniqueValidator(queryset=categories.objects.all())]
     # )
 
-    slug = serializers.CharField(
-        write_only=True, required=True)
+
 
     class Meta:
         model = categories
         fields = ('id', 'title',
-                  'slug',
+                  'url_slug',
                   'description',
+                  'created_at',
+                  'is_active',
                   )
         extra_kwargs = {
             'id': {'required': True},
             'title': {'required': True},
+            'created_at': {'required': True},
+            'is_active': {'required': True},
             'description': {'required': False},
         }
 
@@ -42,12 +45,12 @@ class addCategory(serializers.ModelSerializer):
         category = categories.objects.create(
             id=validated_data.get('id'),
             title=validated_data.get('title'),
+            created_at=validated_data.get('created_at'),
+            is_active=validated_data.get('is_active'),
             description=validated_data.get('description'),
-            dealer=validated_data.get('dealer'),
 
         )
 
-        category.set_password(validated_data['password'])
         category.save()
 
         return category
