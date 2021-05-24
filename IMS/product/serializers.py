@@ -1,9 +1,5 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import categories
-from rest_framework.validators import UniqueValidator
-from django.contrib.auth.password_validation import validate_password
+from .models import categories, SubCategories
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 """
@@ -54,3 +50,40 @@ class addCategory(serializers.ModelSerializer):
         category.save()
 
         return category
+
+
+class addSubCategory(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubCategories
+        fields = ('id', 'category_id',
+                  'title',
+                  'url_slug',
+                  'description',
+                  'created_at',
+                  'is_active',
+                  )
+        extra_kwargs = {
+            'id': {'required': True},
+            'category_id': {'required': True},
+            'title': {'required': True},
+            'created_at': {'required': True},
+            'is_active': {'required': True},
+            'description': {'required': False},
+        }
+
+    def create(self, validated_data):
+        sub_category = categories.objects.create(
+            id=validated_data.get('id'),
+            category_id = validated_data.get("category_id"),
+            title=validated_data.get('title'),
+            created_at=validated_data.get('created_at'),
+            is_active=validated_data.get('is_active'),
+            description=validated_data.get('description'),
+
+        )
+
+        sub_category.save()
+
+        return sub_category
+

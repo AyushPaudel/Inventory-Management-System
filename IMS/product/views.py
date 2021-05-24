@@ -1,13 +1,29 @@
 from django.shortcuts import render
-from .serializers import addCategory
+from .serializers import addCategory, addSubCategory
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from .models import categories
+from .models import categories, SubCategories
 
 
 # Create your views here.
-class categoryView(generics.CreateAPIView):
+class CategoryCreateView(generics.CreateAPIView):
     queryset = categories.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = addCategory
+
+class CategoryUpdateView(generics.UpdateAPIView):
+    queryset = categories.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = addCategory
+
+
+class SubCategoryCreateView(generics.CreateAPIView):
+    queryset = SubCategories.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = addSubCategory
+
+class SubCategoryUpdateView(generics.UpdateAPIView):
+    queryset = SubCategories.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = addSubCategory

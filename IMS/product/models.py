@@ -13,7 +13,7 @@ class categories(models.Model):
     is_active = models.IntegerField(default=1)
 
 
-class subCategories(models.Model):
+class SubCategories(models.Model):
     id = models.AutoField(primary_key=True)
     category_id = models.ForeignKey(categories, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
