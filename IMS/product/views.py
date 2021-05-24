@@ -3,7 +3,7 @@ from .serializers import addCategory, addSubCategory
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from .models import categories, SubCategories
+from .models import categories, subCategories
 
 
 # Create your views here.
@@ -19,11 +19,11 @@ class CategoryUpdateView(generics.UpdateAPIView):
 
 
 class SubCategoryCreateView(generics.CreateAPIView):
-    queryset = SubCategories.objects.all()
+    queryset = subCategories.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = addSubCategory
 
 class SubCategoryUpdateView(generics.UpdateAPIView):
-    queryset = SubCategories.objects.all()
+    queryset = subCategories.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = addSubCategory

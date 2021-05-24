@@ -1,4 +1,4 @@
-from .models import categories, SubCategories
+from .models import categories, subCategories
 from rest_framework import serializers
 
 
@@ -14,12 +14,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 """
 
 class addCategory(serializers.ModelSerializer):
-    # email = serializers.EmailField(
-    #     required=True,
-    #     validators=[UniqueValidator(queryset=categories.objects.all())]
-    # )
-
-
 
     class Meta:
         model = categories
@@ -55,7 +49,7 @@ class addCategory(serializers.ModelSerializer):
 class addSubCategory(serializers.ModelSerializer):
 
     class Meta:
-        model = SubCategories
+        model = subCategories
         fields = ('id', 'category_id',
                   'title',
                   'url_slug',
@@ -73,7 +67,7 @@ class addSubCategory(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        sub_category = categories.objects.create(
+        sub_category = subCategories.objects.create(
             id=validated_data.get('id'),
             category_id = validated_data.get("category_id"),
             title=validated_data.get('title'),
