@@ -17,7 +17,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 """
 
-class registerSerializer(serializers.ModelSerializer):
+class addCategory(serializers.ModelSerializer):
     # email = serializers.EmailField(
     #     required=True,
     #     validators=[UniqueValidator(queryset=categories.objects.all())]
@@ -25,27 +25,18 @@ class registerSerializer(serializers.ModelSerializer):
 
     slug = serializers.CharField(
         write_only=True, required=True)
-    slug2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = categories
         fields = ('id', 'title',
-                  'slug', 'slug2',
-                  'description', 'dealer',
+                  'slug',
+                  'description',
                   )
         extra_kwargs = {
             'id': {'required': True},
             'title': {'required': True},
             'description': {'required': False},
-            'dealer': {'required': False},
         }
-
-    def validate(self, attrs):
-        if attrs['slug'] != attrs['slug2']:
-            raise serializers.ValidationError(
-                {"password": "Password fields didn't match!"})
-
-        return attrs
 
     def create(self, validated_data):
         category = categories.objects.create(

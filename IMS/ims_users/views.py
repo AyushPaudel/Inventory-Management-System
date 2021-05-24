@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import registerSerializer, changePasswordSerializer,\
-                         updateProfileSerializer, logoutSerializer
+                         updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
@@ -67,3 +67,8 @@ class logoutAllView(APIView):
             t, _ = BlacklistedToken.objects.get_or_create(token=token)
 
         return Response(status=status.HTTP_205_RESET_CONTENT)
+
+
+# Admin login
+class adminTokenObtainPairView(TokenObtainPairView):
+    serializer_class = adminTokenObtainPairSerializer
