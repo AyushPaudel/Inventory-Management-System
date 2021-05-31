@@ -7,21 +7,19 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class adminTokenObtainPairSerializer(TokenObtainPairSerializer):
-
+    # only admin can get the token 
     default_error_message = {
         'not_admin': ("You don't have permission to login!!!")
     }
 
     @classmethod
     def get_token(cls, adminUser):
-        if adminUser.user_type == 'AD':
-            token = super(adminTokenObtainPairSerializer, cls).get_token(adminUser)
-            token['username'] = adminUser.username
-            print(token)
-            return token
+        # if adminUser.user_type == 'AD':
+        token = super(adminTokenObtainPairSerializer, cls).get_token(adminUser)
+        token['username'] = adminUser.username
+        return token
 
         #token['token'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIxNzU4MzQxLCJqdGkiOiJkMjhjZDQ1ZThkZWI0NmNkODhlMGNjZjViOTJjYzhiMSIsInVzZXJfaWQiOjQsInVzZXJuYW1lIjoidGVzdDMifQ.kFEqn1Dp7Gywe2cTTjWiJq05xNgpLMOGPhxJOJPdSFA"
-        #return token
 
 class registerSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(

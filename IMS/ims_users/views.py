@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 # Create your views here.
 
 
@@ -71,4 +72,35 @@ class logoutAllView(APIView):
 
 # Admin login
 class adminTokenObtainPairView(TokenObtainPairView):
+    def is_user_admin(self, username):
+        try:
+            user = imsUser.objects.get(username=username)
+            if user.user_type == 'AD':
+                return True
+            else: 
+                return False
+
+        except Exception as e:
+            return False
+
+
+
     serializer_class = adminTokenObtainPairSerializer
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        # get user 
+        user = request.data['username']
+        if self.is_user_admin(user):
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        else:
+            return Response('{"not" : "done" }',status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
