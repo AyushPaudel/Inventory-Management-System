@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import addCategory, addSubCategory
+from .serializers import categorySerializer, subCategorySerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
@@ -9,23 +9,23 @@ from ims_users.permissions import adminPermission
 
 
 # Create your views here.
-class CategoryCreateView(generics.CreateAPIView):
+class categoryCreateView(generics.CreateAPIView):
     queryset = categories.objects.all()
     permission_classes = (adminPermission,)
-    serializer_class = addCategory
+    serializer_class = categorySerializer
 
-class CategoryUpdateView(generics.UpdateAPIView):
+class categoryUpdateView(generics.UpdateAPIView):
     queryset = categories.objects.all()
     permission_classes = (adminPermission,)
-    serializer_class = addCategory
+    serializer_class = categorySerializer
 
 
-class SubCategoryCreateView(generics.CreateAPIView):
+class subCategoryCreateView(generics.CreateAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
-    serializer_class = addSubCategory
+    serializer_class = subCategorySerializer
 
-class SubCategoryUpdateView(generics.UpdateAPIView):
+class subCategoryUpdateView(generics.UpdateAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
-    serializer_class = addSubCategory
+    serializer_class = subCategorySerializer

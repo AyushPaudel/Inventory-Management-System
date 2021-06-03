@@ -12,7 +12,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 """
 
-class addCategory(serializers.ModelSerializer):
+class categorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = categories
@@ -23,7 +23,6 @@ class addCategory(serializers.ModelSerializer):
                   'is_active',
                   )
         extra_kwargs = {
-            'id': {'required': True},
             'title': {'required': True},
             'url_slug': {'required': True},
             'created_at': {'required': True},
@@ -33,24 +32,36 @@ class addCategory(serializers.ModelSerializer):
 
     def create(self, validated_data):
         category = categories.objects.create(
-            id=validated_data.get('id'),
             title=validated_data.get('title'),
+            url_slug = validated_data.get('url_slug'),
             created_at=validated_data.get('created_at'),
             is_active=validated_data.get('is_active'),
             description=validated_data.get('description'),
-
         )
 
         category.save()
 
         return category
+    '''
+    def update(self, instance, validated_data):
+        instance.id = validated_data.get('id')
+        instance.title = validated_data.get('title')
+        instance.url_slug = validated_data.get('url_slug')
+        instance.created_at = validated_data.get('created_at')
+        instance.is_active = validated_data.get('is_active')
+        instance.description = validated_data.get('description')
+
+        instance.save()
+
+        return instance
+    '''
 
 
-class addSubCategory(serializers.ModelSerializer):
+class subCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = subCategories
-        fields = ('id', 'category_id',
+        fields = ('category_id',
                   'title',
                   'url_slug',
                   'description',
@@ -58,12 +69,11 @@ class addSubCategory(serializers.ModelSerializer):
                   'is_active',
                   )
         extra_kwargs = {
-            'id': {'required': True},
             'category_id': {'required': True},
             'title': {'required': True},
             'created_at': {'required': True},
             'is_active': {'required': True},
-            'description': {'required': False},
+            'description': {'required': True},
         }
 
     def create(self, validated_data):
@@ -81,3 +91,16 @@ class addSubCategory(serializers.ModelSerializer):
 
         return sub_category
 
+    '''
+    def update(self, instance, validated_data):
+
+        instance.title = validated_data.get('title')
+        instance.url_slug = validated_data.get('url_slug')
+        instance.created_at = validated_data.get('created_at')
+        instance.is_active = validated_data.get('is_active')
+        instance.description = validated_data.get('description')
+
+        instance.save()
+
+        return instance
+    '''
