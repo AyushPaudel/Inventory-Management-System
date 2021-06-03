@@ -37,7 +37,7 @@ class registerSerializer(serializers.ModelSerializer):
                   'password2', 'email',
                   'name', 'Landline_number',
                   'mobile_number', 'address',
-                  'user_type'
+                  'user_type', 'pay', 'profile_pic',
                   )
         extra_kwargs = {
             'name': {'required': True},
@@ -45,6 +45,8 @@ class registerSerializer(serializers.ModelSerializer):
             'Landline_number': {'required': False},
             'mobile_number': {'required': False},
             'user_type': {'required': True},
+            'pay': {'required': False},
+            'profile_pic': {'required': False},
         }
 
     def validate(self, attrs):

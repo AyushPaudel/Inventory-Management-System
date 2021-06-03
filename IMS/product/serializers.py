@@ -1,7 +1,6 @@
 from .models import categories, subCategories
 from rest_framework import serializers
 
-
 """
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
@@ -26,9 +25,10 @@ class addCategory(serializers.ModelSerializer):
         extra_kwargs = {
             'id': {'required': True},
             'title': {'required': True},
+            'url_slug': {'required': True},
             'created_at': {'required': True},
             'is_active': {'required': True},
-            'description': {'required': False},
+            'description': {'required': True},
         }
 
     def create(self, validated_data):

@@ -87,22 +87,7 @@ class productTags(models.Model):
     is_active = models.IntegerField(default=1)
 
 
-class productVarient(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class productVarientItems(models.Model):
-    id = models.AutoField(primary_key=True)
-    product_varient_id = models.ForeignKey(
-        productVarient, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(products, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class customerOrders(models.Model):
+class recipt(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(products, on_delete=models.DO_NOTHING)
     purchase_price = models.CharField(max_length=255)

@@ -19,6 +19,8 @@ class imsUser(AbstractUser):
         validators=[phone_regex], max_length=17, blank=True)
 
     address = models.CharField(max_length=100, blank=True)
+    profile_pic = models.FileField(default="")
+    pay = models.IntegerField(default=0)
 
     # user types
     user_type_choices = [
@@ -34,20 +36,17 @@ class imsUser(AbstractUser):
 
 
 class adminUser(models.Model):
-    profile_pic = models.FileField(default="")
     auth_user_id = models.OneToOneField(imsUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class staffUser(models.Model):
-    profile_pic = models.FileField(default="")
     auth_user_id = models.OneToOneField(imsUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class customerUser(models.Model):
     auth_user_id = models.OneToOneField(imsUser, on_delete=models.CASCADE)
-    profile_pic = models.FileField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
 
