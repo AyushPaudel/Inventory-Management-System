@@ -24,6 +24,8 @@ media# Backup files #
 .Python build/ 
 develop-eggs/ 
 dist/ 
+.idea
+.vscode
 downloads/ 
 eggs/ 
 .eggs/ 
