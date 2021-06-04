@@ -20,7 +20,6 @@ class categorySerializer(serializers.ModelSerializer):
         fields = ('id', 'title',
                   'url_slug',
                   'description',
-                  'created_at',
                   'is_active',
                   )
         extra_kwargs = {
@@ -72,6 +71,7 @@ class subCategorySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'category_id': {'required': True},
             'title': {'required': True},
+            'url_slug': {'required': True},
             'created_at': {'required': True},
             'is_active': {'required': True},
             'description': {'required': True},
@@ -81,6 +81,7 @@ class subCategorySerializer(serializers.ModelSerializer):
         sub_category = subCategories.objects.create(
             id=validated_data.get('id'),
             category_id = validated_data.get("category_id"),
+            url_slug = validated_data.get("url_slug"),
             title=validated_data.get('title'),
             created_at=validated_data.get('created_at'),
             is_active=validated_data.get('is_active'),
@@ -92,16 +93,16 @@ class subCategorySerializer(serializers.ModelSerializer):
 
         return sub_category
 
-    '''
+
     def update(self, instance, validated_data):
 
+        instance.category_id = validated_data.get('category_id')
         instance.title = validated_data.get('title')
         instance.url_slug = validated_data.get('url_slug')
-        instance.created_at = validated_data.get('created_at')
         instance.is_active = validated_data.get('is_active')
         instance.description = validated_data.get('description')
+        instance.created_at = datetime.now()
 
         instance.save()
 
         return instance
-    '''
