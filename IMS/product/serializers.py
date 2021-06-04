@@ -41,7 +41,6 @@ class categorySerializer(serializers.ModelSerializer):
         )
 
         category.save()
-
         return category
 
 
@@ -53,8 +52,9 @@ class categorySerializer(serializers.ModelSerializer):
         instance.description = validated_data.get('description')
         instance.created_at = datetime.now()
         instance.save()
-
         return instance
+
+
 
 
 class subCategorySerializer(serializers.ModelSerializer):
@@ -106,3 +106,8 @@ class subCategorySerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    def destroy(self, request, *args, **kwargs):
+            instance = self.get_object()
+            self.perform_destroy(instance)
+
