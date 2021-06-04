@@ -107,7 +107,4 @@ class subCategorySerializer(serializers.ModelSerializer):
 
         return instance
 
-    def destroy(self, request, *args, **kwargs):
-            instance = self.get_object()
-            self.perform_destroy(instance)
 
