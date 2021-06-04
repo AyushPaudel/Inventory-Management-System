@@ -9,12 +9,26 @@ from ims_users.permissions import adminPermission
 
 
 # Create your views here.
-class categoryCreateView(generics.CreateAPIView):
+class categoryListView(generics.ListAPIView):
     queryset = categories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = categorySerializer
 
+
 class categoryUpdateView(generics.UpdateAPIView):
+    queryset = categories.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = categorySerializer
+    lookup_field = 'url_slug'
+
+
+class categoryDetailView(generics.RetrieveAPIView):
+    queryset = categories.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = categorySerializer
+    lookup_field = 'url_slug'
+
+class categoryCreateView(generics.CreateAPIView):
     queryset = categories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = categorySerializer
@@ -24,6 +38,7 @@ class subCategoryCreateView(generics.CreateAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = subCategorySerializer
+
 
 class subCategoryUpdateView(generics.UpdateAPIView):
     queryset = subCategories.objects.all()

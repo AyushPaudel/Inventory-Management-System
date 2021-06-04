@@ -1,5 +1,6 @@
 from .models import categories, subCategories
 from rest_framework import serializers
+from datetime import datetime
 
 """
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -30,6 +31,7 @@ class categorySerializer(serializers.ModelSerializer):
             'description': {'required': True},
         }
 
+
     def create(self, validated_data):
         category = categories.objects.create(
             title=validated_data.get('title'),
@@ -42,19 +44,18 @@ class categorySerializer(serializers.ModelSerializer):
         category.save()
 
         return category
-    '''
+
+
     def update(self, instance, validated_data):
-        instance.id = validated_data.get('id')
         instance.title = validated_data.get('title')
         instance.url_slug = validated_data.get('url_slug')
         instance.created_at = validated_data.get('created_at')
         instance.is_active = validated_data.get('is_active')
         instance.description = validated_data.get('description')
-
+        instance.created_at = datetime.now()
         instance.save()
 
         return instance
-    '''
 
 
 class subCategorySerializer(serializers.ModelSerializer):
