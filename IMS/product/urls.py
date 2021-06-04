@@ -7,11 +7,13 @@ urlpatterns = [
     path('categoryupdate/<url_slug>/', views.categoryUpdateView.as_view(), name='update-category'),
     path('categorylist/', views.categoryListView.as_view(), name='category-list'),
     path('categorydetail/<url_slug>/', views.categoryDetailView.as_view(), name='category-detail'),
+    path('categorydelete/<url_slug>/', views.categoryDeleteView.as_view(), name='category-delete'),
 
     #sub-category
     path('addsubcategory/', views.subCategoryCreateView.as_view(), name='add-subcategory'),
     path('subcategoryupdate/<url_slug>/', views.subCategoryUpdateView.as_view(), name='update-subcategory'),
     path('subcategorydetail/<url_slug>/', views.subCategoryDetailView.as_view(), name='subcategory-detail'),
     path('subcategorylist/', views.subCategoryListView.as_view(), name='subcategory-list'),
+    path('subcategorydelete/<url_slug>/', views.subCategoryDeleteView.as_view(), name='subcategory-delete'),
 ]
 

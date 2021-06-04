@@ -34,6 +34,13 @@ class categoryCreateView(generics.CreateAPIView):
     serializer_class = categorySerializer
 
 
+class categoryDeleteView(generics.DestroyAPIView):
+    queryset = categories.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = categorySerializer
+    lookup_field = 'url_slug'
+
+
 class subCategoryCreateView(generics.CreateAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
@@ -57,4 +64,11 @@ class subCategoryUpdateView(generics.UpdateAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = subCategorySerializer
+    lookup_field = 'url_slug'
+
+
+class subCategoryDeleteView(generics.DestroyAPIView):
+    queryset = subCategories.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = categorySerializer
     lookup_field = 'url_slug'
