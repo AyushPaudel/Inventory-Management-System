@@ -90,3 +90,26 @@ class productListView(generics.ListAPIView):
     queryset = products.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = productSerializer
+
+
+class productUpdateView(generics.UpdateAPIView):
+    queryset = products.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = productSerializer
+    lookup_field = 'url_slug'
+
+
+class productDeleteView(generics.DestroyAPIView):
+    queryset = products.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = productSerializer
+    lookup_field = 'url_slug'
+
+
+class productDetailView(generics.RetrieveAPIView):
+    queryset = products.objects.all()
+    permission_classes = (adminPermission,)
+    serializer_class = productSerializer
+    lookup_field = 'url_slug'
+
+

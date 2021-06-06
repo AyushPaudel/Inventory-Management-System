@@ -17,7 +17,10 @@ urlpatterns = [
     path('subcategorydelete/<url_slug>/', views.subCategoryDeleteView.as_view(), name='subcategory-delete'),
 
     #Products
-    path('addproduct/', views.productCreateView.as_view(), name = 'add-product'),
-    path('productlist/', views.productListView.as_view(), name = 'product-list'),
+    path('addproduct/', views.productCreateView.as_view(), name='add-product'),
+    path('productlist/', views.productListView.as_view(), name='product-list'),
+    path('productupdate/', views.productUpdateView.as_view(), name='product-update'),
+    path('productdetail/', views.productUpdateView.as_view(), name='product-detail'),
+    path('productdelete/', views.productDeleteView.as_view(), name='product-delete'),
 ]
 

@@ -160,3 +160,18 @@ class productSerializer(serializers.ModelSerializer):
 
         return products
 
+    def update(self, instance, validated_data):
+        instance.sub_category_id = validated_data.get("sub_category_id"),
+        instance.url_slug = validated_data.get("url_slug"),
+        instance.product_name = validated_data.get('product_name'),
+        instance.brand = validated_data.get('brand'),
+        instance.product_max_price = validated_data.get('product_max_price'),
+        instance.product_discount_price = validated_data.get('product_discount_price'),
+        instance.product_long_description = validated_data.get('product_long_description'),
+        # added_by_staff = validated_data.get('added_by_staff'),
+        instance.is_active = validated_data.get('is_active'),
+        instance.total_stock = validated_data.get('total_stock'),
+
+        instance.save()
+
+        return instance
