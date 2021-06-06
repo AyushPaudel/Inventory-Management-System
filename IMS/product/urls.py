@@ -19,8 +19,8 @@ urlpatterns = [
     #Products
     path('addproduct/', views.productCreateView.as_view(), name='add-product'),
     path('productlist/', views.productListView.as_view(), name='product-list'),
-    path('productupdate/', views.productUpdateView.as_view(), name='product-update'),
-    path('productdetail/', views.productUpdateView.as_view(), name='product-detail'),
-    path('productdelete/', views.productDeleteView.as_view(), name='product-delete'),
+    path('productupdate/<url_slug>/', views.productUpdateView.as_view(), name='product-update'),
+    path('productdetail/<url_slug>/', views.productUpdateView.as_view(), name='product-detail'),
+    path('productdelete/<url_slug>/', views.productDeleteView.as_view(), name='product-delete'),
 ]
 
