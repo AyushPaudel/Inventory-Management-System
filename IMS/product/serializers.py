@@ -110,36 +110,36 @@ class subCategorySerializer(serializers.ModelSerializer):
 
 
 class productSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = products
+        fields = ('url_slug',
+                'sub_categories_id',
+                'product_name',
+                'brand',
+                'product_max_price',
+                'product_discount_price',
+                'product_description',
+                'product_long_description',
+                'created_at',
+                #'added_by_staff',
+                'total_stock',
+                'is_active',
+                )
 
-    model = products
-    fields = ('url_slug',
-              'sub_categories_id',
-              'product_name',
-              'brand',
-              'product_max_price',
-              'product_discount_price',
-              'product_description',
-              'product_long_description',
-              'created_at',
-              #'added_by_staff',
-              'total_stock',
-              'is_active',
-              )
-
-    extra_kwargs = {
-        'url_slug': {'required': True},
-        'sub_categories_id': {'required': True},
-        'product_name': {'required': True},
-        'brand': {'required': True},
-        'product_max_price': {'required': True},
-        'product_discount_price': {'required': True},
-        'product_description': {'required': True},
-        'product_long_description': {'required': False},
-        'created_at': {'required': True},
-        #'added_by_staff': {'required': True},
-        'is_active': {'required': True},
-        'total_stock': {'required': True},
-    }
+        extra_kwargs = {
+            'url_slug': {'required': True},
+            'sub_categories_id': {'required': True},
+            'product_name': {'required': True},
+            'brand': {'required': True},
+            'product_max_price': {'required': True},
+            'product_discount_price': {'required': True},
+            'product_description': {'required': True},
+            'product_long_description': {'required': False},
+            'created_at': {'required': True},
+            #'added_by_staff': {'required': True},
+            'is_active': {'required': True},
+            'total_stock': {'required': True},
+        }
 
 
     def create(self, validated_data):
