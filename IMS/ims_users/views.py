@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import registerSerializer, changePasswordSerializer,\
-                         updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer
+                         updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer,\
+                         customTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
@@ -21,11 +22,11 @@ class testView(APIView):
         content = {'message': "Congrats! you're in"}
         return Response(content)
 
-"""
+
 class loginView(TokenObtainPairView):
     permission_classes = (AllowAny,)
-    serializer_class = MyTokenObtainPairSerializer
-"""
+    serializer_class = customTokenObtainPairSerializer
+
 
 class registerView(generics.CreateAPIView):
     queryset = imsUser.objects.all()

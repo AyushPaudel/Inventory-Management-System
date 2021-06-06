@@ -6,6 +6,15 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+class customTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super(customTokenObtainPairSerializer, self).validate(attrs)
+        data.update({'user': self.user.username})
+        data.update({'id': self.user.id})
+        return data
+
+
+
 class adminTokenObtainPairSerializer(TokenObtainPairSerializer):
     # only admin can get the token 
     default_error_message = {
@@ -20,6 +29,16 @@ class adminTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
         #token['token'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIxNzU4MzQxLCJqdGkiOiJkMjhjZDQ1ZThkZWI0NmNkODhlMGNjZjViOTJjYzhiMSIsInVzZXJfaWQiOjQsInVzZXJuYW1lIjoidGVzdDMifQ.kFEqn1Dp7Gywe2cTTjWiJq05xNgpLMOGPhxJOJPdSFA"
+
+
+    def validate(self, attrs):
+        data = super(adminTokenObtainPairSerializer, self).validate(attrs)
+        data.update({'user': self.user.username})
+        data.update({'id': self.user.id})
+        return data
+
+
+
 
 class registerSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(

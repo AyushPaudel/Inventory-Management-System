@@ -1,4 +1,4 @@
-from .models import categories, subCategories
+from .models import categories, subCategories, products
 from rest_framework import serializers
 from datetime import datetime
 
@@ -61,7 +61,8 @@ class subCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = subCategories
-        fields = ('category_id',
+        fields = ('id',
+                  'category_id',
                   'title',
                   'url_slug',
                   'description',
@@ -107,4 +108,55 @@ class subCategorySerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class productSerializer(serializers.ModelSerializer):
+
+    model = products
+    fields = ('url_slug',
+              'sub_categories_id',
+              'product_name',
+              'brand',
+              'product_max_price',
+              'product_discount_price',
+              'product_description',
+              'product_long_description',
+              'created_at',
+              #'added_by_staff',
+              'total_stock',
+              'is_active',
+              )
+
+    extra_kwargs = {
+        'url_slug': {'required': True},
+        'sub_categories_id': {'required': True},
+        'product_name': {'required': True},
+        'brand': {'required': True},
+        'product_max_price': {'required': True},
+        'product_discount_price': {'required': True},
+        'product_description': {'required': True},
+        'product_long_description': {'required': False},
+        'created_at': {'required': True},
+        #'added_by_staff': {'required': True},
+        'is_active': {'required': True},
+        'total_stock': {'required': True},
+    }
+
+
+    def create(self, validated_data):
+        products = products.objects.create(
+            sub_category_id = validated_data.get("sub_category_id"),
+            url_slug = validated_data.get("url_slug"),
+            product_name = validated_data.get('product_name'),
+            brand = validated_data.get('brand'),
+            product_max_price = validated_data.get('product_max_price'),
+            product_discount_price = validated_data.get('product_discount_price'),
+            product_long_description = validated_data.get('product_long_description'),
+            #added_by_staff = validated_data.get('added_by_staff'),
+            is_active = validated_data.get('is_active'),
+            total_stock = validated_data.get('total_stock'),
+        )
+
+        products.save()
+
+        return products
 

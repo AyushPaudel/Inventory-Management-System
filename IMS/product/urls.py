@@ -15,5 +15,9 @@ urlpatterns = [
     path('subcategorydetail/<url_slug>/', views.subCategoryDetailView.as_view(), name='subcategory-detail'),
     path('subcategorylist/', views.subCategoryListView.as_view(), name='subcategory-list'),
     path('subcategorydelete/<url_slug>/', views.subCategoryDeleteView.as_view(), name='subcategory-delete'),
+
+    #Products
+    path('addproduct/', views.productCreateView.as_view(), name = 'add-product'),
+    path('productlist/', views.productListView.as_view(), name = 'product-list'),
 ]
 
