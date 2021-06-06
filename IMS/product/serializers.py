@@ -143,7 +143,8 @@ class productSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-        products = products.objects.create(
+
+        product = products.objects.create(
             sub_category_id = validated_data.get("sub_category_id"),
             url_slug = validated_data.get("url_slug"),
             product_name = validated_data.get('product_name'),
@@ -156,9 +157,9 @@ class productSerializer(serializers.ModelSerializer):
             total_stock = validated_data.get('total_stock'),
         )
 
-        products.save()
+        product.save()
 
-        return products
+        return product
 
     def update(self, instance, validated_data):
         instance.sub_category_id = validated_data.get("sub_category_id"),
