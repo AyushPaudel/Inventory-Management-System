@@ -145,7 +145,7 @@ class productSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         product = products.objects.create(
-            sub_category_id = validated_data.get("sub_category_id"),
+            sub_categories_id = validated_data.get("sub_categories_id"),
             url_slug = validated_data.get("url_slug"),
             product_name = validated_data.get('product_name'),
             brand = validated_data.get('brand'),
