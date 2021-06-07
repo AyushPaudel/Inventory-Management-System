@@ -38,17 +38,18 @@ class products(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     #added_by_staff = models.ForeignKey(staffUser, on_delete=models.CASCADE)
     total_stock = models.IntegerField(default=1)
+    media_content = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
     is_active = models.IntegerField(default=1)
 
-
+'''
 class productMedia(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(products, on_delete=models.CASCADE)
-    media_type = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
+    media_content = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
     media_content = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(default=1)
-
+'''
 
 class productTransaction(models.Model):
     id = models.AutoField(primary_key=True)
