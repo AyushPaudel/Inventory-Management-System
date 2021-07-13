@@ -14,7 +14,6 @@ class customTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-
 class adminTokenObtainPairSerializer(TokenObtainPairSerializer):
     # only admin can get the token 
     default_error_message = {
@@ -28,16 +27,11 @@ class adminTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = adminUser.username
         return token
 
-        #token['token'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIxNzU4MzQxLCJqdGkiOiJkMjhjZDQ1ZThkZWI0NmNkODhlMGNjZjViOTJjYzhiMSIsInVzZXJfaWQiOjQsInVzZXJuYW1lIjoidGVzdDMifQ.kFEqn1Dp7Gywe2cTTjWiJq05xNgpLMOGPhxJOJPdSFA"
-
-
     def validate(self, attrs):
         data = super(adminTokenObtainPairSerializer, self).validate(attrs)
         data.update({'user': self.user.username})
         data.update({'id': self.user.id})
         return data
-
-
 
 
 class registerSerializer(serializers.ModelSerializer):
@@ -159,7 +153,7 @@ class updateProfileSerializer(serializers.ModelSerializer):
 
         user = self.context['request'].user
 
-        if user.pk != instance.pk:
+        if user.pk != instance.pk or instance.user_type != 'AD':
             raise serializers.ValidationError(
                 {"authorize": "You don't have permission to update profile for this user!"})
 
@@ -197,4 +191,20 @@ class logoutSerializer(serializers.Serializer):
 
         except TokenError:
             self.fail('bad_token')
+
+
+# Staff management:
+class staffManagementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = imsUser
+        fields = ('username', 'email',
+                'name', 'Landline_number',
+                'mobile_number', 'address',
+                'user_type', 'auth_user_id',
+                'created_at',
+                )
+
+        
+
+
 

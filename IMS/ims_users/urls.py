@@ -19,4 +19,10 @@ urlpatterns = [
         name='admin_obtain_token'),
     path('adminlogin/refresh/', TokenRefreshView.as_view(),
          name="admin_refresh_token"),
+
+    # Staff management:
+    path('staff/register/', views.staffRegisterView.as_view(), name="staff_register"),
+    path('staff/update_profile/<int:pk>/', views.staffProfileUpdate.as_view(), name="staff_profile_update"),
+    path('staff/stafflist/', views.staffListView.as_view(), name="staff_list"),
+    path('staff/staffdetail/<int:pk>/', views.staffDetailView.as_view(), name="staff_detail"),
 ]

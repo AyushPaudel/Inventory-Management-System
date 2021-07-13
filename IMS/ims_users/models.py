@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.utils.timezone import now
 # Create your models here.
 
 
@@ -29,15 +30,17 @@ class imsUser(AbstractUser):
         ('CU', 'Customer'),
     ]
     user_type = models.CharField(
-        max_length=255, choices=user_type_choices, default='AD')
+        max_length=255, choices=user_type_choices, default='CU')
+    created_at = models.DateTimeField(default=now, editable=False)
 
     def __str__(self):
         return self.username
 
 
+'''
 class adminUser(models.Model):
     auth_user_id = models.OneToOneField(imsUser, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    
 
 
 class staffUser(models.Model):
@@ -74,3 +77,4 @@ def save_user_profile(sender, instance, **kwargs):
 
     if instance.user_type == 'CU':
         instance.customeruser.save()
+'''

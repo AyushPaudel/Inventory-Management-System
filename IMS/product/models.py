@@ -1,5 +1,4 @@
 from django.db import models
-from ims_users.models import staffUser, adminUser, customerUser
 # Create your models here.
 
 

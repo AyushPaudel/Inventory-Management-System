@@ -1,9 +1,10 @@
+from django.db.models import query
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import registerSerializer, changePasswordSerializer,\
                          updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer,\
-                         customTokenObtainPairSerializer
+                         customTokenObtainPairSerializer, staffManagementSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from .permissions import adminPermission
 # Create your views here.
 
 
@@ -31,7 +33,7 @@ class loginView(TokenObtainPairView):
 class registerView(generics.CreateAPIView):
     queryset = imsUser.objects.all()
     permission_classes = (AllowAny,)
-    serializer_class = registerSerializer
+    serializer_class = registerSerializer #only allow 'CU' in the user_type choice field.
 
 
 class changePasswordView(generics.UpdateAPIView):
@@ -60,6 +62,7 @@ class logoutView(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class logoutAllView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -85,7 +88,6 @@ class adminTokenObtainPairView(TokenObtainPairView):
             return False
 
 
-
     serializer_class = adminTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
         print(request.data)
@@ -103,5 +105,28 @@ class adminTokenObtainPairView(TokenObtainPairView):
             return Response('{"not" : "done" }',status=status.HTTP_401_UNAUTHORIZED)
 
 
+# Admin's staff management. 
+class staffRegisterView(generics.CreateAPIView):
+    queryset = imsUser.objects.filter(user_type="ST")
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = registerSerializer #only allow 'ST' in the user_type choice field.
 
 
+class staffProfileUpdate(generics.UpdateAPIView):
+    queryset = imsUser.objects.filter(user_type="ST")
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = updateProfileSerializer
+
+
+class staffListView(generics.ListAPIView):
+    queryset = imsUser.objects.filter(user_type="ST")
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = staffManagementSerializer
+
+
+class staffDetailView(generics.RetrieveAPIView):
+    queryset = imsUser.objects.filter(user_type="ST")
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = staffManagementSerializer
+    
+    
