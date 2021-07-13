@@ -7,6 +7,8 @@ from .models import categories, subCategories, products
 
 from ims_users.permissions import adminPermission
 
+from product.pagination import CustomPagination
+
 
 # Create your views here.
 
@@ -16,6 +18,7 @@ class categoryListView(generics.ListAPIView):
     queryset = categories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = categorySerializer
+    pagination_class = CustomPagination
 
 
 class categoryUpdateView(generics.UpdateAPIView):
@@ -56,6 +59,7 @@ class subCategoryListView(generics.ListAPIView):
     queryset = subCategories.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = subCategorySerializer
+    pagination_class = CustomPagination
 
 
 class subCategoryDetailView(generics.RetrieveAPIView):
@@ -90,6 +94,7 @@ class productListView(generics.ListAPIView):
     queryset = products.objects.all()
     permission_classes = (adminPermission,)
     serializer_class = productSerializer
+    pagination_class = CustomPagination
 
 
 class productUpdateView(generics.UpdateAPIView):

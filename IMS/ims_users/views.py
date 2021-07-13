@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .permissions import adminPermission
+from ims_users.pagination import CustomPagination
 # Create your views here.
 
 
@@ -89,6 +90,8 @@ class adminTokenObtainPairView(TokenObtainPairView):
 
 
     serializer_class = adminTokenObtainPairSerializer
+
+
     def post(self, request, *args, **kwargs):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
@@ -122,6 +125,7 @@ class staffListView(generics.ListAPIView):
     queryset = imsUser.objects.filter(user_type="ST")
     permission_classes = (IsAuthenticated, adminPermission)
     serializer_class = staffManagementSerializer
+    pagination_class = CustomPagination
 
 
 class staffDetailView(generics.RetrieveAPIView):
