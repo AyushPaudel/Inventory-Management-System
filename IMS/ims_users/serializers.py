@@ -200,7 +200,7 @@ class staffManagementSerializer(serializers.ModelSerializer):
         fields = ('username', 'email',
                 'name', 'Landline_number',
                 'mobile_number', 'address',
-                'user_type', 'auth_user_id',
+                'user_type',
                 'created_at',
                 )
 

@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .serializers import categorySerializer, subCategorySerializer, productSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
@@ -8,6 +7,9 @@ from .models import categories, subCategories, products
 from ims_users.permissions import adminPermission
 
 from product.pagination import CustomPagination
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 # Create your views here.
@@ -116,5 +118,15 @@ class productDetailView(generics.RetrieveAPIView):
     permission_classes = (adminPermission,)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
+
+
+# List products of the same 
+class productListSubCategory(generics.ListAPIView):
+    '''def get(self, request, format=None):
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets, many=True)
+        return Response(serializer.data)
+'''
+
 
 
