@@ -197,7 +197,7 @@ class logoutSerializer(serializers.Serializer):
 class staffManagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = imsUser
-        fields = ('username', 'email',
+        fields = ('id', 'username', 'email',
                 'name', 'Landline_number',
                 'mobile_number', 'address',
                 'user_type',
