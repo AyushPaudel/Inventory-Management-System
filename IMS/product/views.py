@@ -119,6 +119,21 @@ class productDetailView(generics.RetrieveAPIView):
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
+class productSearchView(APIView):
+    def get(self,request,url_slug):
+        try:
+            query = products.objects.filter(url_slug__startswith=url_slug)
+            query = [{'url_slug': q.url_slug, 'product_name': q.product_name, 'total_stock': q.total_stock} for q in query]
+            return Response(
+                {'data': query}
+            )
+        except:
+            return Response({'data': ''})
+
+
+
+
+
 
 # List products of the same 
 class productListSubCategory(generics.ListAPIView):
