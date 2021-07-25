@@ -1,3 +1,4 @@
+from django.utils.timezone import override
 from .serializers import categorySerializer, subCategorySerializer, productSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
@@ -119,17 +120,16 @@ class productDetailView(generics.RetrieveAPIView):
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
-class productSearchView(APIView):
-    def get(self,request,url_slug):
-        try:
-            query = products.objects.filter(url_slug__startswith=url_slug)
-            query = [{'url_slug': q.url_slug, 'product_name': q.product_name, 'total_stock': q.total_stock} for q in query]
-            return Response(
-                {'data': query}
-            )
-        except:
-            return Response({'data': ''})
 
+class productSearchView(generics.ListAPIView):
+    permission_classes = (adminPermission,)
+    serializer_class = productSerializer
+    lookup_url_kwarg="url_slug"
+
+    def get_queryset(self):
+        uid = self.kwargs.get(self.lookup_url_kwarg)
+        queryset = products.objects.filter(url_slug__startswith=uid)
+        return queryset 
 
 
 
@@ -137,11 +137,14 @@ class productSearchView(APIView):
 
 # List products of the same 
 class productListSubCategory(generics.ListAPIView):
-    '''def get(self, request, format=None):
-        snippets = Snippet.objects.all()
-        serializer = SnippetSerializer(snippets, many=True)
-        return Response(serializer.data)
-'''
+    permission_classes = (adminPermission,)
+    serializer_class = productSerializer
+    lookup_url_kwarg="url_slug"
+
+    def get_queryset(self):
+        uid = self.kwargs.get(self.lookup_url_kwarg)
+        queryset = products.objects.filter(url_slug=uid)
+        return queryset 
 
 
 
