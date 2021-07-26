@@ -23,5 +23,8 @@ urlpatterns = [
     path('productdetail/<url_slug>/', views.productUpdateView.as_view(), name='product-detail'),
     path('productdelete/<url_slug>/', views.productDeleteView.as_view(), name='product-delete'),
     path('productlist/<url_slug>/', views.productListSubCategory.as_view(), name='product-list-sub'),
+    # product search
+    path('productSearch/<url_slug>/', views.productSearchView.as_view(),name='product-search')
+
 ]
 

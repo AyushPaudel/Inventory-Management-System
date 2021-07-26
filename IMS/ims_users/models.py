@@ -30,7 +30,7 @@ class imsUser(AbstractUser):
         ('CU', 'Customer'),
     ]
     user_type = models.CharField(
-        max_length=255, choices=user_type_choices, default='CU')
+        max_length=255, choices=user_type_choices, default='AD')
     created_at = models.DateTimeField(default=now, editable=False)
 
     def __str__(self):

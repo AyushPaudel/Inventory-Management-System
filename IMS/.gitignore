@@ -84,3 +84,4 @@ GitHub.sublime-settings # Visual Studio Code #
 !.vscode/extensions.json 
 .history
 requirements.txt
+db.sqlite3
