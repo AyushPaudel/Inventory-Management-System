@@ -117,7 +117,7 @@ class staffRegisterView(generics.CreateAPIView):
 
 class staffProfileUpdate(generics.UpdateAPIView):
     queryset = imsUser.objects.filter(user_type="ST")
-    permission_classes = (IsAuthenticated, adminPermission)
+    permission_classes = (adminPermission,)
     serializer_class = updateProfileSerializer
 
 
