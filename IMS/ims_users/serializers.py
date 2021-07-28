@@ -205,9 +205,23 @@ class staffManagementSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email',
                 'name', 'Landline_number',
                 'mobile_number', 'address',
+                'pay',
                 'user_type',
                 'created_at',
                 )
+
+
+# Customer management:
+class customerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = imsUser
+        fields = ('id', 'username', 'email',
+                'name', 'mobile_number', 'address',
+                'user_type',
+                'created_at',
+                )
+
+        
 
         
 

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import registerSerializer, changePasswordSerializer,\
                          updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer,\
-                         customTokenObtainPairSerializer, staffManagementSerializer
+                         customTokenObtainPairSerializer, staffManagementSerializer, customerSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import imsUser
 from rest_framework import generics
@@ -15,6 +15,8 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .permissions import adminPermission
 from ims_users.pagination import CustomPagination
+
+from ims_users import serializers
 # Create your views here.
 
 
@@ -132,5 +134,12 @@ class staffDetailView(generics.RetrieveAPIView):
     queryset = imsUser.objects.filter(user_type="ST")
     permission_classes = (IsAuthenticated, adminPermission)
     serializer_class = staffManagementSerializer
+
+
+class customerListView(generics.ListAPIView):
+    queryset = imsUser.objects.filter(user_type="CU")
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = customerSerializer
+    pagination_class = CustomPagination
     
     

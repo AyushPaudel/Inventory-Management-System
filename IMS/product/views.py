@@ -3,14 +3,17 @@ from .serializers import categorySerializer, subCategorySerializer, productSeria
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from .models import categories, subCategories, products
+from .models import categories, subCategories, products, imsUser, recipt
 
 from ims_users.permissions import adminPermission
 
 from product.pagination import CustomPagination
 
+
+# For custom views
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import serializers
 
 
 # Create your views here.
@@ -132,10 +135,7 @@ class productSearchView(generics.ListAPIView):
         return queryset 
 
 
-
-
-
-# List products of the same 
+# List products of the same sub-category
 class productListSubCategory(generics.ListAPIView):
     permission_classes = (adminPermission,)
     serializer_class = productSerializer
@@ -144,7 +144,16 @@ class productListSubCategory(generics.ListAPIView):
     def get_queryset(self):
         uid = self.kwargs.get(self.lookup_url_kwarg)
         queryset = products.objects.filter(url_slug=uid)
-        return queryset 
+        return queryset
+
+
+# Customer detail and analytics
+@APIView(['GET'])
+def customerDetail(request, pk):
+    
+
+
+
 
 
 

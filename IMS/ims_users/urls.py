@@ -25,4 +25,7 @@ urlpatterns = [
     path('staff/update_profile/<int:pk>/', views.staffProfileUpdate.as_view(), name="staff_profile_update"),
     path('staff/stafflist/', views.staffListView.as_view(), name="staff_list"),
     path('staff/staffdetail/<int:pk>/', views.staffDetailView.as_view(), name="staff_detail"),
+
+    # Customer: 
+    path('customer/customerlist/', views.customerListView().as_view(), name="customer_list"),
 ]
