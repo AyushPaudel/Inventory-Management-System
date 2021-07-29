@@ -78,3 +78,4 @@ def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 'CU':
         instance.customeruser.save()
 '''
+

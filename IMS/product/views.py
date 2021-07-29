@@ -3,7 +3,7 @@ from .serializers import categorySerializer, subCategorySerializer, productSeria
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from .models import categories, subCategories, products, imsUser, recipt
+from .models import categories, subCategories, products, imsUser, Recipt
 
 from ims_users.permissions import adminPermission
 
@@ -147,13 +147,7 @@ class productListSubCategory(generics.ListAPIView):
         return queryset
 
 
-# Customer detail and analytics
-@APIView(['GET'])
-def customerDetail(request, pk):
-    
-
-
-
-
-
+# # Customer detail and analytics
+# @APIView(['GET'])
+# def customerDetail(request, pk):
 

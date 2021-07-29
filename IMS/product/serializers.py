@@ -1,6 +1,7 @@
-from .models import categories, subCategories, products
+from .models import categories, subCategories, products, Recipt, customerRecords
 from rest_framework import serializers
 from datetime import datetime
+from ims_users.models import imsUser
 
 """
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -184,3 +185,15 @@ class productSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+# class customerRecordSerializer(serializers.ModelSerializer):
+
+#     total_expenditure = serializers.SerializerMethodField('calc_total_expenditure')
+
+#     class Meta:
+#         model = imsUser
+#         fields = ('id', 'username', 'email', 'mobile_number', 'address',)
+
+#     def calc_total_expenditure(self, customerRecords, recipt):
+#         total_expenditure = customerRecords.objects.get()

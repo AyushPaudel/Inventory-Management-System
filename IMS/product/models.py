@@ -39,6 +39,7 @@ class products(models.Model):
     product_long_description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     total_stock = models.IntegerField(default=1)
+    
     media_content = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
     is_active = models.IntegerField(default=1)
 
@@ -88,7 +89,7 @@ class productTags(models.Model):
     is_active = models.IntegerField(default=1)
 
 
-class recipt(models.Model):
+class Recipt(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(products, on_delete=models.DO_NOTHING)
     purchase_price = models.CharField(max_length=255)
@@ -100,9 +101,12 @@ class recipt(models.Model):
 
 # Making the customer record table:
 class customerRecords(models.Model):
-    user_id = models.OneToOneField(imsUser, on_delete=models.CASCADE)
-    purchased_product_id = models.ForeignKey(recipt, on_delete=models.DO_NOTHING)
-    purchased_date = models.DateField()
+    imsuser = models.OneToOneField(imsUser, on_delete=models.CASCADE)
+    recipt = models.ForeignKey(Recipt, on_delete=models.DO_NOTHING, blank=True, null=True)
+    purchased_date = models.DateField(null=True)
+
+    def __str__(self):
+        return (str(self.imsuser))
 
 
 #Create user in records table if created.
@@ -110,12 +114,5 @@ class customerRecords(models.Model):
 def create_customer_records(sender, instance, created, **kwargs):
     if created:
         if instance.user_type == 'CU':
-            customerRecords.objects.create(user_id=instance)
-
-
-@receiver(post_save, sender=imsUser)
-def save_customer_records(sender, instance, **kwargs):
-
-    if instance.user_type == 'CU':
-        instance.customerRecords.save()
+            customerRecords.objects.create(imsuser=instance)
 
