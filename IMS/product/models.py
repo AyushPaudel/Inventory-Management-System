@@ -1,7 +1,7 @@
 from django.db import models
 from ims_users.models import imsUser
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import m2m_changed, post_save
 # Create your models here.
 
 
@@ -14,6 +14,9 @@ class categories(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(default=1)
 
+    def __str__(self):
+        return(str(self.title))
+
 
 class subCategories(models.Model):
     id = models.AutoField(primary_key=True)
@@ -25,6 +28,9 @@ class subCategories(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.IntegerField(default=1)
 
+    def __str__(self):
+        return(str(self.title))
+
 
 class products(models.Model):
     id = models.AutoField(primary_key=True)
@@ -33,15 +39,18 @@ class products(models.Model):
         subCategories, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255)
     brand = models.CharField(max_length=255)
-    product_max_price = models.CharField(max_length=255)
-    product_discount_price = models.CharField(max_length=255)
+    product_max_price = models.PositiveIntegerField(default=0)
+    product_discount_price = models.PositiveIntegerField(default=0)
     product_description = models.TextField()
     product_long_description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    total_stock = models.IntegerField(default=1)
+    total_stock = models.PositiveIntegerField(default=1)
     
     media_content = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
     is_active = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str(self.product_name)
 
 '''
 class productMedia(models.Model):
@@ -91,12 +100,14 @@ class productTags(models.Model):
 
 class Recipt(models.Model):
     id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(products, on_delete=models.DO_NOTHING)
-    purchase_price = models.CharField(max_length=255)
-    coupon_code = models.CharField(max_length=255)
-    discount_amount = models.CharField(max_length=255)
-    product_status = models.CharField(max_length=255)
+    product = models.ManyToManyField(products)
+    purchase_price = models.PositiveIntegerField(default=0)
+    discount_amount = models.PositiveIntegerField(default=0)
+    total_items = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return(str(self.created_at))
 
 
 # Making the customer record table:
@@ -115,4 +126,28 @@ def create_customer_records(sender, instance, created, **kwargs):
     if created:
         if instance.user_type == 'CU':
             customerRecords.objects.create(imsuser=instance)
+
+
+@receiver(m2m_changed, sender=Recipt.product.through)
+def m2m_changed_recipt_product(sender, instance, action, **kwargs):
+    total_items = 0
+    total_price = 0
+    discount = 0
+    
+    if action == 'post_add' or action == 'post_remove':
+        print(action)
+        for product in instance.product.all():
+            total_items +=1
+            total_price += (product.product_max_price - product.product_discount_price)
+            discount += product.product_discount_price
+
+        instance.purchase_price = total_price
+        instance.discount_amount = discount
+        instance.total_items = total_items
+        instance.save()
+
+
+
+
+    
 
