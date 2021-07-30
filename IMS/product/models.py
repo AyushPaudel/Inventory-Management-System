@@ -2,6 +2,7 @@ from django.db import models
 from ims_users.models import imsUser
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed, post_save
+from datetime import datetime
 # Create your models here.
 
 
@@ -113,8 +114,9 @@ class Recipt(models.Model):
 # Making the customer record table:
 class customerRecords(models.Model):
     imsuser = models.OneToOneField(imsUser, on_delete=models.CASCADE)
-    recipt = models.ForeignKey(Recipt, on_delete=models.DO_NOTHING, blank=True, null=True)
-    purchased_date = models.DateField(null=True)
+    recipt = models.ManyToManyField(Recipt)
+    total_expenditure = models.PositiveIntegerField(default=0)
+
 
     def __str__(self):
         return (str(self.imsuser))
@@ -128,6 +130,7 @@ def create_customer_records(sender, instance, created, **kwargs):
             customerRecords.objects.create(imsuser=instance)
 
 
+# Alter recipt when product is added. 
 @receiver(m2m_changed, sender=Recipt.product.through)
 def m2m_changed_recipt_product(sender, instance, action, **kwargs):
     total_items = 0
@@ -145,6 +148,22 @@ def m2m_changed_recipt_product(sender, instance, action, **kwargs):
         instance.discount_amount = discount
         instance.total_items = total_items
         instance.save()
+
+
+@receiver(m2m_changed, sender=customerRecords.recipt.through)
+def m2m_changed_recipt_product(sender, instance, action, **kwargs):
+    total_recipts = 0
+    total_expenditure = 0
+    
+    if action == 'post_add' or action == 'post_remove':
+        print(action)
+        for recipt in instance.recipt.all():
+            total_recipts +=1
+            total_expenditure += recipt.purchase_price
+
+        instance.total_expenditure = total_expenditure
+        instance.save()
+
 
 
 

@@ -1,11 +1,11 @@
 from django.utils.timezone import override
-from .serializers import categorySerializer, subCategorySerializer, productSerializer
+from .serializers import categorySerializer, subCategorySerializer, productSerializer, customerRecordSerializer
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import categories, subCategories, products, imsUser, Recipt
 
-from ims_users.permissions import adminPermission
+from ims_users.permissions import adminPermission, staffPermission
 
 from product.pagination import CustomPagination
 
@@ -135,7 +135,7 @@ class productSearchView(generics.ListAPIView):
         return queryset 
 
 
-# List products of the same sub-category
+# List products of the same sub-category:
 class productListSubCategory(generics.ListAPIView):
     permission_classes = (adminPermission,)
     serializer_class = productSerializer
@@ -147,7 +147,10 @@ class productListSubCategory(generics.ListAPIView):
         return queryset
 
 
-# # Customer detail and analytics
-# @APIView(['GET'])
-# def customerDetail(request, pk):
+# Customer Detail View:
+class customerRecordView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = imsUser.objects.filter(user_type='CU')
+    serializer_class = customerRecordSerializer
+
 

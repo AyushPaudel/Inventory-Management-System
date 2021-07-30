@@ -187,13 +187,15 @@ class productSerializer(serializers.ModelSerializer):
         return instance
 
 
-# class customerRecordSerializer(serializers.ModelSerializer):
+class customerRecordSerializer(serializers.ModelSerializer):
 
-#     total_expenditure = serializers.SerializerMethodField('calc_total_expenditure')
+     total_expenditure = serializers.SerializerMethodField('get_total_expenditure')
 
-#     class Meta:
-#         model = imsUser
-#         fields = ('id', 'username', 'email', 'mobile_number', 'address',)
+     class Meta:
+         model = imsUser
+         fields = ('id', 'username', 'email', 'mobile_number', 'address', 'total_expenditure')
 
-#     def calc_total_expenditure(self, customerRecords, recipt):
-#         total_expenditure = customerRecords.objects.get()
+     def get_total_expenditure(self, obj):
+         print(obj)
+         customer = customerRecords.objects.get(imsuser = obj.id)
+         return customer.total_expenditure
