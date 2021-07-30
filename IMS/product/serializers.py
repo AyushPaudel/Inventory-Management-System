@@ -187,15 +187,36 @@ class productSerializer(serializers.ModelSerializer):
         return instance
 
 
+class reciptObtainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipt
+        fields = ('id', 'product', 'purchase_price', 'discount_amount', 'total_items', 'created_at')
+
+
 class customerRecordSerializer(serializers.ModelSerializer):
 
-     total_expenditure = serializers.SerializerMethodField('get_total_expenditure')
+    total_expenditure = serializers.SerializerMethodField('get_total_expenditure')
+    purchased_products = reciptObtainSerializer(many=True, read_only=True)
 
-     class Meta:
-         model = imsUser
-         fields = ('id', 'username', 'email', 'mobile_number', 'address', 'total_expenditure')
+    class Meta:
+        model = imsUser
+        fields = ('id', 'username', 'email', 'mobile_number', 'address', 'total_expenditure', 'purchased_products')
 
-     def get_total_expenditure(self, obj):
-         print(obj)
-         customer = customerRecords.objects.get(imsuser = obj.id)
-         return customer.total_expenditure
+    def get_total_expenditure(self, obj):
+        print(obj)
+        customer = customerRecords.objects.get(imsuser = obj.id)
+        return customer.total_expenditure
+
+    # def get_all_purchased_items(self, obj):
+    #     print(obj)
+    #     customer = customerRecords.objects.get(imsuser = obj.id)
+    #     recipts = customer.recipt.all()
+    #     print(recipts)
+    #     recipts = list(recipts)
+    #     return recipts
+
+
+
+
+
+
