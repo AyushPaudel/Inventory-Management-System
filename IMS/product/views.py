@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import categories, subCategories, products, imsUser, Recipt
 
-from ims_users.permissions import adminPermission, staffPermission
+from ims_users.permissions import adminPermission, staffPermission, customerPermission
 
 from product.pagination import CustomPagination
 
@@ -152,5 +152,24 @@ class customerRecordView(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = imsUser.objects.filter(user_type='CU')
     serializer_class = customerRecordSerializer
+
+
+# Redeem token View:
+class redeemToken(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, unique_token):
+        try: 
+            recipt = Recipt.objects.get(unique_token=unique_token)
+        except: 
+            content = {'message': "Error: Code not valid!!!"}
+        else:
+            if recipt.redeemed == False:
+                recipt.redeemed = True
+                recipt.save()
+                content = {'message': "Congrats! You redeemed your token"}
+            else:
+                content = {'message': "Error: Code already redeemed!!!"}
+        return Response(content)
 
 

@@ -2,7 +2,9 @@ from django.db import models
 from ims_users.models import imsUser
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed, post_save
+
 from datetime import datetime
+import uuid 
 # Create your models here.
 
 
@@ -106,9 +108,11 @@ class Recipt(models.Model):
     discount_amount = models.PositiveIntegerField(default=0)
     total_items = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    unique_token = models.CharField(max_length=10, blank=True)
+    redeemed = models.BooleanField(default=False)
 
     def __str__(self):
-        return(str(self.created_at))
+        return(str(self.unique_token))
 
 
 # Making the customer record table:
@@ -147,6 +151,11 @@ def m2m_changed_recipt_product(sender, instance, action, **kwargs):
         instance.purchase_price = total_price
         instance.discount_amount = discount
         instance.total_items = total_items
+
+        # Generating Unique Tokens:
+        if instance.unique_token == "":
+            instance.unique_token = str(uuid.uuid4()).replace("-", "").upper()[:10]
+
         instance.save()
 
 
