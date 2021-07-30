@@ -169,7 +169,7 @@ class redeemToken(APIView):
                 recipt.save()
                 content = {'message': "Congrats! You redeemed your token", 'Token': f"{recipt.unique_token}", 'id': f"{recipt.id}"}
             else:
-                content = {'message': "Error: Code already redeemed!!!"}
+                content = {'message': "Error: Code already redeemed!!!", 'Token': f"{recipt.unique_token}", 'id': f"{recipt.id}",}
         return Response(content)
 
 
