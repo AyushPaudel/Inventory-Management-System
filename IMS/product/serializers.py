@@ -125,6 +125,7 @@ class productSerializer(serializers.ModelSerializer):
                 #'added_by_staff',
                 'total_stock',
                 'is_active',
+                'id'
                 )
 
 
