@@ -189,26 +189,26 @@ class redeemToken(APIView):
 
 class popularProducts(APIView):
     permission_classes = (IsAuthenticated,)
-    data = []
     def get(self, request):
+        data = []
         queryset = products.objects.all()
         for product in queryset:
-             self.data.append({
+             data.append({
                 'product': product.product_name,
                 'total_stock': product.total_stock,
                 'original_stock': product.original_stock
             })
-        self.data.sort(key=lambda x: (x['original_stock']-x['total_stock']),reverse=True)
+        data.sort(key=lambda x: (x['original_stock']-x['total_stock']),reverse=True)
 
-        return Response({'result': self.data[:4]})
+        return Response({'result': data[:4]})
 
 class popularCategories(APIView):
-    data = []
-    category_queryset = categories.objects.all()
     def get(self, request):
+        data = []
+        category_queryset = categories.objects.all()
         final_total = 0
         final_sold = 0
-        for category in self.category_queryset:
+        for category in category_queryset:
             number_of_subcategories = 0
             number_of_products = 0
             total = 0
@@ -223,7 +223,7 @@ class popularCategories(APIView):
                     sold+=(product.original_stock-product.total_stock)
             final_total += total    
             final_sold += sold
-            self.data.append({
+            data.append({
                 'category': category.title,
                 'subcategories': number_of_subcategories,
                 'product': number_of_products,
@@ -231,4 +231,4 @@ class popularCategories(APIView):
                 'sold':sold
             })
 
-        return Response({'result': self.data , 'total': final_total, 'sold': final_sold})
+        return Response({'result': data , 'total': final_total, 'sold': final_sold})
