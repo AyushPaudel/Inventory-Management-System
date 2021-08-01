@@ -162,6 +162,7 @@ class productSerializer(serializers.ModelSerializer):
             product_max_price = validated_data.get('product_max_price'),
             product_discount_price = validated_data.get('product_discount_price'),
             product_description = validated_data.get('product_description'),
+            product_long_description = validated_data.get('product_long_description'),
             #added_by_staff = validated_data.get('added_by_staff'),
             is_active = validated_data.get('is_active'),
             total_stock = validated_data.get('total_stock'),
