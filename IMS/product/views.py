@@ -156,8 +156,7 @@ class customerRecordView(generics.RetrieveAPIView):
 
 # Redeem token View:
 class redeemToken(APIView):
-    permission_classes = (IsAuthenticated,)
-
+    permission_classes = (AllowAny,)
     def get(self, request, unique_token):
         try: 
             recipt = Recipt.objects.get(unique_token=unique_token)
