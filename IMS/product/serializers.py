@@ -165,6 +165,7 @@ class productSerializer(serializers.ModelSerializer):
             #added_by_staff = validated_data.get('added_by_staff'),
             is_active = validated_data.get('is_active'),
             total_stock = validated_data.get('total_stock'),
+            original_stock = validated_data.get('total_stock'),
         )
 
         product.save()
@@ -196,8 +197,19 @@ class receiptCreateSerializer(serializers.ModelSerializer):
     
     def create(self,validated_data):
         instance = Recipt.objects.create(quantity = validated_data['quantity'])
+        # quantity array represents quantity of products 
+        quantityArray = validated_data['quantity'].split(',')
+
+        index = 0
         for product in validated_data['product']:
+            if product.total_stock >= int(quantityArray[index]):
+                product.total_stock -= int(quantityArray[index])
+            else:
+                product.total_stock = 0
+
+            product.save()
             instance.product.add(product)
+            index+=1
 
         return instance
             

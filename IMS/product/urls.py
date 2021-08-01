@@ -32,6 +32,8 @@ urlpatterns = [
     path('receipt/<unique_token>/', views.receiptView.as_view(), name='receipt'),
     path('receipt/', views.receiptViewAll.as_view(), name='receipt'),
     path('createReceipt/', views.receiptCreate.as_view(), name='receipt_create'),
+    path('popularProducts/', views.popularProducts.as_view(), name='popular products'),
+    path('popularCategories/', views.popularCategories.as_view(), name='popular Categories'),
 
     # Redeem Code:
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),

@@ -47,6 +47,7 @@ class products(models.Model):
     product_description = models.TextField()
     product_long_description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    original_stock = models.PositiveIntegerField(default=1)
     total_stock = models.PositiveIntegerField(default=1)
     
     media_content = models.ImageField(blank=True, null=True, upload_to='photos/products/%Y/%m/%d/')
@@ -143,11 +144,13 @@ def m2m_changed_recipt_product(sender, instance, action, **kwargs):
     discount = 0
     
     if action == 'post_add' or action == 'post_remove':
-        print(action)
+        index = 0
+        quantity = instance.quantity.split(',')
         for product in instance.product.all():
-            total_items +=1
-            total_price += (product.product_max_price - product.product_discount_price)
+            total_items += int(quantity[index])
+            total_price += product.product_max_price*total_items 
             discount += product.product_discount_price
+            index+=1
 
         instance.purchase_price = total_price
         instance.discount_amount = discount

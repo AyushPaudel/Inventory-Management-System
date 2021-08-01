@@ -1,5 +1,6 @@
 from django.db.models import query
 from django.utils.timezone import override
+from rest_framework import response
 from .serializers import categorySerializer, receiptCreateSerializer, recieptObtainSerializer, subCategorySerializer, productSerializer, customerRecordSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -186,3 +187,53 @@ class redeemToken(APIView):
         return Response(content)
 
 
+class popularProducts(APIView):
+    permission_classes = (IsAuthenticated,)
+    data = []
+    def get(self, request):
+        queryset = products.objects.all()
+        for product in queryset:
+             self.data.append({
+                'product': product.product_name,
+                'total_stock': product.total_stock,
+                'original_stock': product.original_stock
+            })
+        self.data.sort(key=lambda x: (x['original_stock']-x['total_stock']),reverse=True)
+
+        return Response({'result': self.data[:4]})
+
+class popularCategories(APIView):
+    data = [
+        {
+            'category': 'Utensils',
+            'subcategories': 10,
+            'products': 20,
+            'total': 120,
+            'sold': 20
+        }
+    ]
+    category_queryset = categories.objects.all()
+    def get(self, request):
+        for category in self.category_queryset:
+            number_of_subcategories = 0
+            number_of_products = 0
+            total = 0
+            sold = 0
+            subcategories = category.subcategories_set.all()
+            for subcategory in subcategories:
+                number_of_subcategories+=1
+                products = subcategory.products_set.all()
+                for product in products:
+                    print(sold)
+                    number_of_products+=1
+                    total+=product.original_stock
+                    sold+=(product.original_stock-product.total_stock)
+            self.data.append({
+                'category': category.title,
+                'subcategories': number_of_subcategories,
+                'product': number_of_products,
+                'total': total,
+                'sold':sold
+            })
+
+        return Response({'result': self.data , 'total_items': 300})

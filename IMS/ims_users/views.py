@@ -142,4 +142,3 @@ class customerListView(generics.ListAPIView):
     serializer_class = customerSerializer
     pagination_class = CustomPagination
     
-    
