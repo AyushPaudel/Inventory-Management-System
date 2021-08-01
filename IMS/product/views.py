@@ -203,15 +203,7 @@ class popularProducts(APIView):
         return Response({'result': self.data[:4]})
 
 class popularCategories(APIView):
-    data = [
-        {
-            'category': 'Utensils',
-            'subcategories': 10,
-            'products': 20,
-            'total': 120,
-            'sold': 20
-        }
-    ]
+    data = []
     category_queryset = categories.objects.all()
     def get(self, request):
         for category in self.category_queryset:
