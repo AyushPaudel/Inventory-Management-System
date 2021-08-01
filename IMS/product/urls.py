@@ -28,6 +28,10 @@ urlpatterns = [
 
     # Customer records:
     path('customerrecord/<int:pk>/', views.customerRecordView.as_view(), name='customer-record'),
+    # Receipts
+    path('receipt/<unique_token>/', views.receiptView.as_view(), name='receipt'),
+    path('receipt/', views.receiptViewAll.as_view(), name='receipt'),
+    path('createReceipt/', views.receiptCreate.as_view(), name='receipt_create'),
 
     # Redeem Code:
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),

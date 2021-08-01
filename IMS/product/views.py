@@ -1,5 +1,6 @@
+from django.db.models import query
 from django.utils.timezone import override
-from .serializers import categorySerializer, subCategorySerializer, productSerializer, customerRecordSerializer
+from .serializers import categorySerializer, receiptCreateSerializer, recieptObtainSerializer, subCategorySerializer, productSerializer, customerRecordSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -123,7 +124,20 @@ class productDetailView(generics.RetrieveAPIView):
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
+class receiptViewAll(generics.ListAPIView):
+    permission_classes =(AllowAny,)
+    queryset = Recipt.objects.all()
+    serializer_class = recieptObtainSerializer
+class receiptView(generics.RetrieveAPIView):
+    permission_classes =(AllowAny,)
+    queryset = Recipt.objects.all()
+    serializer_class = recieptObtainSerializer
+    lookup_field = 'unique_token'
 
+class receiptCreate(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = receiptCreateSerializer
+    
 class productSearchView(generics.ListAPIView):
     permission_classes = (adminPermission,)
     serializer_class = productSerializer

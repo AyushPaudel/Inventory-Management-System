@@ -187,16 +187,32 @@ class productSerializer(serializers.ModelSerializer):
         return instance
 
 
-class reciptObtainSerializer(serializers.ModelSerializer):
+
+class receiptCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipt
-        fields = ('id', 'product', 'purchase_price', 'discount_amount', 'total_items', 'created_at')
+        fields = '__all__' 
+    
+    def create(self,validated_data):
+        instance = Recipt.objects.create(quantity = validated_data['quantity'])
+        for product in validated_data['product']:
+            instance.product.add(product)
+
+        return instance
+            
+
+
+class recieptObtainSerializer(serializers.ModelSerializer):
+    product = productSerializer(many = True, read_only = True)
+    class Meta:
+        model = Recipt
+        fields = '__all__' 
 
 
 class customerRecordSerializer(serializers.ModelSerializer):
 
     total_expenditure = serializers.SerializerMethodField('get_total_expenditure')
-    purchased_products = reciptObtainSerializer(many=True, read_only=True)
+    purchased_products = recieptObtainSerializer(many=True, read_only=True)
 
     class Meta:
         model = imsUser
