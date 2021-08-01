@@ -206,6 +206,8 @@ class popularCategories(APIView):
     data = []
     category_queryset = categories.objects.all()
     def get(self, request):
+        final_total = 0
+        final_sold = 0
         for category in self.category_queryset:
             number_of_subcategories = 0
             number_of_products = 0
@@ -216,10 +218,11 @@ class popularCategories(APIView):
                 number_of_subcategories+=1
                 products = subcategory.products_set.all()
                 for product in products:
-                    print(sold)
                     number_of_products+=1
                     total+=product.original_stock
                     sold+=(product.original_stock-product.total_stock)
+            final_total += total    
+            final_sold += sold
             self.data.append({
                 'category': category.title,
                 'subcategories': number_of_subcategories,
@@ -228,4 +231,4 @@ class popularCategories(APIView):
                 'sold':sold
             })
 
-        return Response({'result': self.data , 'total_items': 300})
+        return Response({'result': self.data , 'total': final_total, 'sold': final_sold})
