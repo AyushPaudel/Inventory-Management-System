@@ -79,6 +79,8 @@ class registerSerializer(serializers.ModelSerializer):
             address=validated_data.get('address'),
             user_type=validated_data.get('user_type'),
         )
+        if 'pay' in validated_data.keys():
+            user.pay = validated_data['pay']
 
         user.set_password(validated_data['password'])
         user.save()
@@ -125,7 +127,7 @@ class updateProfileSerializer(serializers.ModelSerializer):
         fields = ('username', 'email',
                   'name', 'Landline_number',
                   'mobile_number', 'address',
-                  'user_type'
+                  'user_type','pay'
                   )
 
         extra_kwargs = {
@@ -161,6 +163,7 @@ class updateProfileSerializer(serializers.ModelSerializer):
             instance.username = validated_data.get('username')
             instance.email = validated_data.get('email')
             instance.name = validated_data.get('name')
+            instance.pay = validated_data.get('pay')
             instance.Landline_number = validated_data.get(
                 'Landline_number', '+000000000')
             instance.mobile_number = validated_data.get(

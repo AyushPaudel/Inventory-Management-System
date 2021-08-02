@@ -23,6 +23,8 @@ urlpatterns = [
     # Staff management:
     path('staff/register/', views.staffRegisterView.as_view(), name="staff_register"),
     path('staff/update_profile/<int:pk>/', views.staffProfileUpdate.as_view(), name="staff_profile_update"),
+    path('staff/modify_pay/<int:pk>/', views.staffPayView.as_view(), name="staff_profile_update"),
+    path('staff/staff_delete/<int:pk>/', views.staffDeleteView.as_view(), name="staff_profile_update"),
     path('staff/stafflist/', views.staffListView.as_view(), name="staff_list"),
     path('staff/staffdetail/<int:pk>/', views.staffDetailView.as_view(), name="staff_detail"),
 

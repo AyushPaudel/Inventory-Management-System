@@ -1,7 +1,7 @@
 from django.db.models import query
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from .serializers import registerSerializer, changePasswordSerializer,\
                          updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer,\
                          customTokenObtainPairSerializer, staffManagementSerializer, customerSerializer
@@ -123,6 +123,29 @@ class staffProfileUpdate(generics.UpdateAPIView):
     serializer_class = updateProfileSerializer
 
 
+class staffDeleteView(APIView):
+    permission_classes=(adminPermission,)
+    def delete(self,request,pk):
+        try:
+            user = imsUser.objects.get(id=pk)
+            user.delete()
+            return Response({'message': 'content deleted'},status=status.HTTP_200_OK)
+        except:
+            return Response({'message': 'no user found'},status=status.HTTP_404_NOT_FOUND)
+class staffPayView(APIView):
+    permission_classes=(adminPermission,)
+    def put(self,request,pk):
+        try:
+            user = imsUser.objects.get(id=pk)
+            if 'pay' in request.data.keys():
+                user.pay = request.data['pay'];
+                user.save()
+                return Response({'message': 'ok'},status=status.HTTP_202_ACCEPTED)
+            else:
+                return Response({'message': 'pay is required'},status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'message': 'no user found'},status=status.HTTP_404_NOT_FOUND)
+        
 class staffListView(generics.ListAPIView):
     queryset = imsUser.objects.filter(user_type="ST")
     permission_classes = (IsAuthenticated, adminPermission)
