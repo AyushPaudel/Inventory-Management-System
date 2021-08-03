@@ -1,5 +1,6 @@
+from datetime import datetime
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import imsUser
+from .models import imsUser,Payment
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
@@ -118,13 +119,30 @@ class changePasswordSerializer(serializers.ModelSerializer):
 
         return instance
 
+class staffPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ('staff','paid_at')
+    
+    def create(self,validated_data):
+        print(datetime.today().month)
+        if len(Payment.objects.filter(staff=validated_data['staff']).filter(paid_at__month=datetime.today().month)) == 0:
+            instance = Payment.objects.create(staff=validated_data['staff'],paid_money = validated_data['staff'].pay)
+            return instance
+        else:
+            raise serializers.ValidationError({'error':'Cannot Pay ! already paid for the month'})
+
+    def update(self,instance,validated_data):
+        instance.paid_money = validated_data.get('paid_money',instance.paid_money)
+        instance.save()
+        return instance
+
 
 class updateProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
 
     class Meta:
         model = imsUser
-        fields = ('username', 'email',
+        fields = (
                   'name', 'Landline_number',
                   'mobile_number', 'address',
                   'user_type','pay'
@@ -137,31 +155,14 @@ class updateProfileSerializer(serializers.ModelSerializer):
             'mobile_number': {'required': False},
         }
 
-    def validate_email(self, value):
-        user = self.context['request'].user
-        if imsUser.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError(
-                {"email": "This Email already in use!"})
-        return value
-
-    def validate_username(self, value):
-        user = self.context['request'].user
-        if imsUser.objects.exclude(pk=user.pk).filter(username=value).exists():
-            raise serializers.ValidationError(
-                {"username": "This username already exists!"})
-        return value
 
     def update(self, instance, validated_data):
-
         user = self.context['request'].user
-        print(user.user_type)
-        print(type(user.user_type))
-        print(user.pk)
-        print(instance.pk)
-
+        # realUser = imsUser.objects.get()
+        print(instance.username)
         if user.pk == instance.pk or user.user_type == "AD":
-            instance.username = validated_data.get('username')
-            instance.email = validated_data.get('email')
+            instance.username = validated_data.get('username',instance.username)
+            instance.email = validated_data.get('email',instance.email)
             instance.name = validated_data.get('name')
             instance.pay = validated_data.get('pay')
             instance.Landline_number = validated_data.get(
@@ -200,18 +201,26 @@ class logoutSerializer(serializers.Serializer):
         except TokenError:
             self.fail('bad_token')
 
+class staffPaymentDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ('staff','paid_money', 'paid_at') 
 
 # Staff management:
 class staffManagementSerializer(serializers.ModelSerializer):
+    payment_set = staffPaymentDataSerializer(many=True,read_only=True)
     class Meta:
         model = imsUser
-        fields = ('id', 'username', 'email',
+        fields = (
+            'id', 'username', 'email',
                 'name', 'Landline_number',
                 'mobile_number', 'address',
                 'pay',
                 'user_type',
                 'created_at',
+                'payment_set'
                 )
+
 
 
 # Customer management:

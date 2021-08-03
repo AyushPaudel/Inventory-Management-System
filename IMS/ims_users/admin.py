@@ -1,10 +1,10 @@
 from django.contrib import admin
-from.models import imsUser
+from .models import imsUser,Payment
 from .forms import imsUserCreationForm
 from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
-
+admin.site.register(Payment)
 class imsUserAdmin(UserAdmin):
     model = imsUser
     add_form = imsUserCreationForm

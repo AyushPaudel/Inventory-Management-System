@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -36,6 +37,14 @@ class imsUser(AbstractUser):
     def __str__(self):
         return self.username
 
+class Payment(models.Model):
+    id = models.AutoField(primary_key=True)
+    staff = models.ForeignKey(imsUser, on_delete=models.CASCADE)
+    paid_money = models.IntegerField()
+    paid_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.staff.username + ' ' + str(self.paid_money)
 
 '''
 class adminUser(models.Model):

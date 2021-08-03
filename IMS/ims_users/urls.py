@@ -26,8 +26,9 @@ urlpatterns = [
     path('staff/modify_pay/<int:pk>/', views.staffPayView.as_view(), name="staff_profile_update"),
     path('staff/staff_delete/<int:pk>/', views.staffDeleteView.as_view(), name="staff_profile_update"),
     path('staff/stafflist/', views.staffListView.as_view(), name="staff_list"),
+    path('staff/staff_payment_list/', views.staffPaymentListView.as_view(), name="staff_list"),
     path('staff/staffdetail/<int:pk>/', views.staffDetailView.as_view(), name="staff_detail"),
-
+    path('staff/paystaff/',views.staffPayRecordView.as_view(), name="staff_pay_record"),
     # Customer: 
     path('customer/customerlist/', views.customerListView().as_view(), name="customer_list"),
 ]

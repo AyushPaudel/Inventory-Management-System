@@ -2,11 +2,13 @@ from django.db.models import query
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
-from .serializers import registerSerializer, changePasswordSerializer,\
+from .serializers import registerSerializer, changePasswordSerializer, staffPaymentSerializer,\
                          updateProfileSerializer, logoutSerializer, adminTokenObtainPairSerializer,\
-                         customTokenObtainPairSerializer, staffManagementSerializer, customerSerializer
+                         customTokenObtainPairSerializer, staffManagementSerializer, customerSerializer,\
+                         staffPaymentSerializer,staffPaymentDataSerializer
+
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import imsUser
+from .models import Payment, imsUser
 from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -153,6 +155,12 @@ class staffListView(generics.ListAPIView):
     pagination_class = CustomPagination
 
 
+class staffPaymentListView(generics.ListAPIView):
+    queryset = Payment.objects.all() 
+    permission_classes = (IsAuthenticated, adminPermission)
+    serializer_class = staffPaymentDataSerializer
+    pagination_class = CustomPagination
+
 class staffDetailView(generics.RetrieveAPIView):
     queryset = imsUser.objects.filter(user_type="ST")
     permission_classes = (IsAuthenticated, adminPermission)
@@ -165,3 +173,7 @@ class customerListView(generics.ListAPIView):
     serializer_class = customerSerializer
     pagination_class = CustomPagination
     
+class staffPayRecordView(generics.CreateAPIView):
+    permission_classes = (adminPermission,)
+    serializer_class = staffPaymentSerializer 
+
