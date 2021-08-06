@@ -25,7 +25,7 @@ urlpatterns = [
     path('productlist/<url_slug>/', views.productListSubCategory.as_view(), name='product-list-sub'),
     # product search
     path('productSearch/<url_slug>/', views.productSearchView.as_view(),name='product-search'),
-
+    path('search/<url_slug>/', views.productSearchThroughName.as_view(),name='product-search-through-name'),
     # Customer records:
     path('customerrecord/<int:pk>/', views.customerRecordView.as_view(), name='customer-record'),
     # Receipts

@@ -149,6 +149,18 @@ class productSearchView(generics.ListAPIView):
         queryset = products.objects.filter(url_slug__startswith=uid)
         return queryset 
 
+class productSearchThroughName(generics.ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = productSerializer
+    lookup_url_kwarg="url_slug"
+
+    def get_queryset(self):
+        print(self.kwargs)
+        name = self.kwargs.get(self.lookup_url_kwarg)
+        print(name)
+        queryset = products.objects.filter(product_name__startswith=name)
+        print(queryset)
+        return queryset 
 
 # List products of the same sub-category:
 class productListSubCategory(generics.ListAPIView):
