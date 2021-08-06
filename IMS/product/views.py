@@ -198,6 +198,17 @@ class redeemToken(APIView):
                 content = {'message': "Error: Code already redeemed!!!", 'Token': f"{recipt.unique_token}", 'id': f"{recipt.id}",}
         return Response(content)
 
+class getIdFromToken(APIView):
+    permission_classes = (AllowAny,)
+    def get(self,request,token):
+        try: 
+            recipt = Recipt.objects.get(unique_token=token)
+            content = {'message': "Token is valid", 'Token': f"{recipt.unique_token}", 'id': f"{recipt.id}"}
+        except: 
+            content = {'message': "Error: Code not valid!!!"}
+        
+        return response(content)
+
 
 class popularProducts(APIView):
     permission_classes = (IsAuthenticated,)

@@ -37,5 +37,6 @@ urlpatterns = [
 
     # Redeem Code:
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
+    path('viewToken/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
 ]
 
