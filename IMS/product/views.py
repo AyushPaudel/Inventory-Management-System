@@ -212,38 +212,22 @@ class getIdFromToken(APIView):
         return response(content)
 
 
-class totalProfitBySubCategory(APIView):
-    permission_classes = (adminPermission,)
-    def get(self, request,subcategory_id):
-        try:
-            queryset = subCategories.objects.get(id=subcategory_id)
-            products = queryset.products_set.all()
 
-            total_profit = 0
-            sold_amount = 0
-            for product in products:
-                total_items_sold = product.original_stock - product.total_stock
-                total_profit += (product.product_max_price - product.product_discount_price) * total_items_sold
-                sold_amount += (product.product_max_price * total_items_sold) 
-            return Response({
-                'subcategory_name':queryset.title,
-                'sold_amount': sold_amount,
-                'profit': total_profit,
-                })
-        except:
-            return Response({
-                'result': 'Error'
-            },status = status.HTTP_404_NOT_FOUND)
-
-class totalStockSoldBySubCategory(APIView):
+class totalStockAndTotalProfitSoldBySubCategory(APIView):
     permission_classes = (adminPermission,)
     def get(self, request,subcategory_id):
         try:
             queryset = subCategories.objects.get(id=subcategory_id)
             products = queryset.products_set.all()
             total_stock_sold = 0
+            tso =0
             total_stock = 0
+            total_profit = 0
+            sold_amount = 0
             for product in products:
+                tso = product.original_stock - product.total_stock
+                total_profit += (product.product_max_price - product.product_discount_price) * tso
+                sold_amount += (product.product_max_price * tso) 
                 total_stock_sold += product.original_stock - product.total_stock
                 total_stock += product.original_stock
             
@@ -251,6 +235,8 @@ class totalStockSoldBySubCategory(APIView):
                 'subcategory_name': queryset.title,
                 'stock_sold': total_stock_sold,
                 'total_stock': total_stock,
+                'sold_amount': sold_amount,
+                'profit': total_profit,
                 })
         except:
             return Response({
