@@ -177,3 +177,27 @@ class staffPayRecordView(generics.CreateAPIView):
     permission_classes = (adminPermission,)
     serializer_class = staffPaymentSerializer 
 
+class totalMoneyPaidToStaff(APIView):
+    permission_classes = (adminPermission, )
+    def get(self,request):
+        queryset = imsUser.objects.filter(user_type = 'ST')
+        total_paid_money = 0
+        staff_payment_arr = []
+        for staff in queryset:
+            staff_payment_receipt = staff.payment_set.all()
+            money_paid_to_staff = 0
+            for receipt in staff_payment_receipt:
+                money_paid_to_staff += receipt.paid_money
+                total_paid_money += receipt.paid_money
+            staff_payment_arr.append({
+                'name': staff.name,
+                'paid_money': money_paid_to_staff
+            })
+        return Response({
+            'total_money_paid': total_paid_money,
+            'staff': staff_payment_arr
+        })
+
+
+
+

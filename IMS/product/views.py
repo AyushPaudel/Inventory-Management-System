@@ -1,9 +1,11 @@
 from django.db.models import query
+from django.http.response import Http404
 from django.utils.timezone import override
 from rest_framework import response
 from .serializers import categorySerializer, receiptCreateSerializer, recieptObtainSerializer, subCategorySerializer, productSerializer, customerRecordSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
 
 from .models import categories, subCategories, products, imsUser, Recipt
 
@@ -208,6 +210,82 @@ class getIdFromToken(APIView):
             content = {'message': "Error: Code not valid!!!"}
         
         return response(content)
+
+
+class totalProfitBySubCategory(APIView):
+    permission_classes = (adminPermission,)
+    def get(self, request,subcategory_id):
+        try:
+            queryset = subCategories.objects.get(id=subcategory_id)
+            products = queryset.products_set.all()
+
+            total_profit = 0
+            sold_amount = 0
+            for product in products:
+                total_items_sold = product.original_stock - product.total_stock
+                total_profit += (product.product_max_price - product.product_discount_price) * total_items_sold
+                sold_amount += (product.product_max_price * total_items_sold) 
+            return Response({
+                'subcategory_name':queryset.title,
+                'sold_amount': sold_amount,
+                'profit': total_profit,
+                })
+        except:
+            return Response({
+                'result': 'Error'
+            },status = status.HTTP_404_NOT_FOUND)
+
+class totalStockSoldBySubCategory(APIView):
+    permission_classes = (adminPermission,)
+    def get(self, request,subcategory_id):
+        try:
+            queryset = subCategories.objects.get(id=subcategory_id)
+            products = queryset.products_set.all()
+            total_stock_sold = 0
+            total_stock = 0
+            for product in products:
+                total_stock_sold += product.original_stock - product.total_stock
+                total_stock += product.original_stock
+            
+            return Response({
+                'subcategory_name': queryset.title,
+                'stock_sold': total_stock_sold,
+                'total_stock': total_stock,
+                })
+        except:
+            return Response({
+                'result': 'Error'
+            },status = status.HTTP_404_NOT_FOUND)
+
+class totalStockSold(APIView):
+    permission_classes = (adminPermission,)
+    def get(self, request):
+        queryset = products.objects.all()
+        total_stock_sold = 0
+        total_stock = 0
+        for product in queryset:
+            total_stock_sold += product.original_stock - product.total_stock
+            total_stock += product.original_stock
+
+        return Response({
+            'stock_sold': total_stock_sold,
+            'total_stock': total_stock
+            })
+
+class totalProfit(APIView):
+    permission_classes = (adminPermission,)
+    def get(self, request):
+        queryset = products.objects.all()
+        total_profit = 0
+        sold_amount = 0
+        for product in queryset:
+            total_items_sold = product.original_stock - product.total_stock
+            total_profit += (product.product_max_price - product.product_discount_price) * total_items_sold
+            sold_amount += (product.product_max_price * total_items_sold) 
+        return Response({
+            'sold_amount': sold_amount,
+            'profit': total_profit,
+            })
 
 
 class popularProducts(APIView):
