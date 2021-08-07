@@ -1,3 +1,4 @@
+from re import I
 from django.db.models import query
 from django.http.response import Http404
 from django.utils.timezone import override
@@ -215,9 +216,12 @@ class getIdFromToken(APIView):
 
 class totalStockAndTotalProfitSoldBySubCategory(APIView):
     permission_classes = (adminPermission,)
-    def get(self, request,subcategory_id):
-        try:
-            queryset = subCategories.objects.get(id=subcategory_id)
+    def get(self, request):
+        q = subCategories.objects.all()
+        print(q)
+        sub_arr = []
+        for queryset in q:
+            print("ok")
             products = queryset.products_set.all()
             total_stock_sold = 0
             tso =0
@@ -230,19 +234,19 @@ class totalStockAndTotalProfitSoldBySubCategory(APIView):
                 sold_amount += (product.product_max_price * tso) 
                 total_stock_sold += product.original_stock - product.total_stock
                 total_stock += product.original_stock
-            
-            return Response({
+        
+            sub_arr.append({
                 'subcategory_name': queryset.title,
                 'stock_sold': total_stock_sold,
                 'total_stock': total_stock,
                 'sold_amount': sold_amount,
                 'profit': total_profit,
-                })
-        except:
-            return Response({
-                'result': 'Error'
-            },status = status.HTTP_404_NOT_FOUND)
+                })  
 
+        return Response({
+            'count': len(sub_arr),
+            'results': sub_arr
+        })
 class totalStockSold(APIView):
     permission_classes = (adminPermission,)
     def get(self, request):

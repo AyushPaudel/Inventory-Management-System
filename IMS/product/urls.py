@@ -37,7 +37,7 @@ urlpatterns = [
 
     path('totalStock/', views.totalStockSold.as_view(), name='popular Categories'),
     path('totalProfit/', views.totalProfit.as_view(), name='popular Categories'),
-    path('totalStockAndProfitBySubCategory/<int:subcategory_id>/', views.totalStockAndTotalProfitSoldBySubCategory.as_view(), name='popular Categories'),
+    path('totalStockAndProfitBySubCategory/', views.totalStockAndTotalProfitSoldBySubCategory.as_view(), name='popular Categories'),
 
     # Redeem Code:
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
