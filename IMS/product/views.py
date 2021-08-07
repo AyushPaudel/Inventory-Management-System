@@ -201,6 +201,7 @@ class redeemToken(APIView):
                 content = {'message': "Error: Code already redeemed!!!", 'Token': f"{recipt.unique_token}", 'id': f"{recipt.id}",}
         return Response(content)
 
+
 class getIdFromToken(APIView):
     permission_classes = (AllowAny,)
     def get(self,request,token):
@@ -211,7 +212,6 @@ class getIdFromToken(APIView):
             content = {'message': "Error: Code not valid!!!"}
         
         return response(content)
-
 
 
 class totalStockAndTotalProfitSoldBySubCategory(APIView):
@@ -247,6 +247,8 @@ class totalStockAndTotalProfitSoldBySubCategory(APIView):
             'count': len(sub_arr),
             'results': sub_arr
         })
+
+
 class totalStockSold(APIView):
     permission_classes = (adminPermission,)
     def get(self, request):
@@ -261,6 +263,7 @@ class totalStockSold(APIView):
             'stock_sold': total_stock_sold,
             'total_stock': total_stock
             })
+
 
 class totalProfit(APIView):
     permission_classes = (adminPermission,)
@@ -292,6 +295,7 @@ class popularProducts(APIView):
         data.sort(key=lambda x: (x['original_stock']-x['total_stock']),reverse=True)
 
         return Response({'result': data[:4]})
+
 
 class popularCategories(APIView):
     def get(self, request):
