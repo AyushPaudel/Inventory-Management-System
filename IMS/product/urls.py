@@ -41,6 +41,7 @@ urlpatterns = [
 
     # Redeem Code:
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
-    path('viewToken/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
+    path('viewToken/<unique_token>/', views.redeemToken.as_view(), name='redeem_token'),
+    path('customerWhoBoughtVariousItems/',views.CustomersWhoBoughtVariousProducts.as_view(),name='machine_learning')
 ]
 

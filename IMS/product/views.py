@@ -323,3 +323,33 @@ class popularCategories(APIView):
             })
 
         return Response({'result': data , 'total': final_total, 'sold': final_sold})
+
+
+class CustomersWhoBoughtVariousProducts(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request):
+        users = imsUser.objects.all()
+        u_arr = []
+        for user in users:
+            recipts = user.recipt_set.filter(customer=user.id)
+            products_arr = []
+            for recipt in recipts:
+                bought_products = recipt.product.all()
+                for product in bought_products:
+                    products_arr.append(
+                        {
+                            "product_name": product.product_name,
+                            "url_slug" : product.url_slug,
+                            "product_id": product.id
+                        }
+                    )
+            u_arr.append(
+                {
+                    "username": user.name,
+                    "id": user.id,
+                    "products": products_arr
+                }
+            ) 
+
+                
+        return Response({'results': u_arr})
