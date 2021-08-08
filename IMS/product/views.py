@@ -10,7 +10,7 @@ from rest_framework import status
 
 from .models import categories, subCategories, products, imsUser, Recipt
 
-from ims_users.permissions import adminPermission, staffPermission, customerPermission
+from ims_users.permissions import adminPermission, StaffOrAdmin , customerPermission
 
 from product.pagination import CustomPagination
 
@@ -103,14 +103,14 @@ class productCreateView(generics.CreateAPIView):
 
 class productListView(generics.ListAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission, staffPermission,)
+    permission_classes = (StaffOrAdmin,)
     serializer_class = productSerializer
     pagination_class = CustomPagination
 
 
 class productUpdateView(generics.UpdateAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission, staffPermission,)
+    permission_classes = (StaffOrAdmin,)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
@@ -124,7 +124,7 @@ class productDeleteView(generics.DestroyAPIView):
 
 class productDetailView(generics.RetrieveAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,  staffPermission,)
+    permission_classes = (StaffOrAdmin,)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
@@ -143,7 +143,7 @@ class receiptCreate(generics.CreateAPIView):
     serializer_class = receiptCreateSerializer
     
 class productSearchView(generics.ListAPIView):
-    permission_classes = (adminPermission, staffPermission,)
+    permission_classes = (StaffOrAdmin,)
     serializer_class = productSerializer
     lookup_url_kwarg="url_slug"
 
@@ -167,7 +167,7 @@ class productSearchThroughName(generics.ListAPIView):
 
 # List products of the same sub-category:
 class productListSubCategory(generics.ListAPIView):
-    permission_classes = (adminPermission, staffPermission,)
+    permission_classes = (StaffOrAdmin,)
     serializer_class = productSerializer
     lookup_url_kwarg="url_slug"
 
