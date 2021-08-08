@@ -97,7 +97,7 @@ class subCategoryDeleteView(generics.DestroyAPIView):
 # Products:
 class productCreateView(generics.CreateAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission, staffPermission)
+    permission_classes = (adminPermission,)
     serializer_class = productSerializer
 
 
@@ -117,7 +117,7 @@ class productUpdateView(generics.UpdateAPIView):
 
 class productDeleteView(generics.DestroyAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission, staffPermission)
+    permission_classes = (adminPermission,)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
