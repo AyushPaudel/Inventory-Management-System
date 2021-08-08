@@ -97,34 +97,34 @@ class subCategoryDeleteView(generics.DestroyAPIView):
 # Products:
 class productCreateView(generics.CreateAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
 
 
 class productListView(generics.ListAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
     pagination_class = CustomPagination
 
 
 class productUpdateView(generics.UpdateAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
 
 class productDeleteView(generics.DestroyAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
 
 class productDetailView(generics.RetrieveAPIView):
     queryset = products.objects.all()
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission,  staffPermission)
     serializer_class = productSerializer
     lookup_field = 'url_slug'
 
@@ -143,7 +143,7 @@ class receiptCreate(generics.CreateAPIView):
     serializer_class = receiptCreateSerializer
     
 class productSearchView(generics.ListAPIView):
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
     lookup_url_kwarg="url_slug"
 
@@ -167,7 +167,7 @@ class productSearchThroughName(generics.ListAPIView):
 
 # List products of the same sub-category:
 class productListSubCategory(generics.ListAPIView):
-    permission_classes = (adminPermission,)
+    permission_classes = (adminPermission, staffPermission)
     serializer_class = productSerializer
     lookup_url_kwarg="url_slug"
 
