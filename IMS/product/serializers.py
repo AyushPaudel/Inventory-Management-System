@@ -192,12 +192,23 @@ class productSerializer(serializers.ModelSerializer):
 
 
 class receiptCreateSerializer(serializers.ModelSerializer):
+    email_customer = serializers.EmailField(required=False) 
     class Meta:
         model = Recipt
-        fields = '__all__' 
+        fields = '__all__'
+        extra_fields = ['email_customer']
     
     def create(self,validated_data):
         instance = Recipt.objects.create(quantity = validated_data['quantity'])
+        #customer
+        print(validated_data['email_customer'])
+        customer_arr = imsUser.objects.filter(email = validated_data['email_customer'])
+        if len(customer_arr) > 0:
+            customer = customer_arr[0]
+            print(customer)
+            instance.customer = customer
+            
+
         # quantity array represents quantity of products 
         quantityArray = validated_data['quantity'].split(',')
 
