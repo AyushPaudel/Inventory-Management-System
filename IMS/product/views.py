@@ -329,6 +329,39 @@ class popularCategories(APIView):
         return Response({'result': data , 'total': final_total, 'sold': final_sold})
 
 
+# if customer is not registered but email was passed , you still can query them for the 
+# bought product
+class EmailsOnlyWhoBoughtVariousProducts(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request):
+        recipts = Recipt.objects.all().order_by('email')
+        recipt_dict = {}
+        for recipt in recipts:
+            if recipt.email != "":
+                products_arr = []
+                if recipt.email not in recipt_dict.keys():
+                    recipt_dict[recipt.email] = []
+                products = recipt.product.all()
+                for product in products:
+                    products_arr.append(
+                        {
+                            "product_name": product.product_name,
+                            "url_slug" : product.url_slug,
+                            "product_id": product.id
+                        }
+                    )
+                recipt_dict[recipt.email]+=products_arr
+            #create a set
+        #convert To CustomersWhoBoughtVariousItems REsponse type
+        result_arr = []
+        for key in recipt_dict.keys():
+            result_arr.append({
+                "email": key,
+                "products": recipt_dict[key]
+            }
+            )
+        return Response({"results":result_arr})
+
 class CustomersWhoBoughtVariousProducts(APIView):
     permission_classes = (AllowAny,)
     def get(self, request):
@@ -357,3 +390,4 @@ class CustomersWhoBoughtVariousProducts(APIView):
 
                 
         return Response({'results': u_arr})
+

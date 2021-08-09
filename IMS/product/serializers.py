@@ -201,13 +201,14 @@ class receiptCreateSerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         instance = Recipt.objects.create(quantity = validated_data['quantity'])
         #customer
-        print(validated_data['email_customer'])
-        customer_arr = imsUser.objects.filter(email = validated_data['email_customer'])
-        if len(customer_arr) > 0:
-            customer = customer_arr[0]
-            print(customer)
-            instance.customer = customer
-            
+        if 'email_customer' in validated_data.keys():
+            instance.email = validated_data['email_customer']
+
+            customer_arr = imsUser.objects.filter(email = validated_data['email_customer'])
+            if len(customer_arr) > 0:
+                customer = customer_arr[0]
+                print(customer)
+                instance.customer = customer
 
         # quantity array represents quantity of products 
         quantityArray = validated_data['quantity'].split(',')

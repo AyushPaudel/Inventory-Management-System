@@ -106,6 +106,7 @@ class Recipt(models.Model):
     id = models.AutoField(primary_key=True)
     product = models.ManyToManyField(products)
     customer = models.ForeignKey(imsUser,on_delete=models.SET_NULL, blank=True, null=True)
+    email = models.EmailField(blank=True)
     quantity = models.TextField(blank=False)
     purchase_price = models.PositiveIntegerField(default=0)
     discount_amount = models.PositiveIntegerField(default=0)
