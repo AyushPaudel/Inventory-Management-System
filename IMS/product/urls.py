@@ -43,6 +43,7 @@ urlpatterns = [
     path('redeem/<unique_token>/', views.redeemToken.as_view(), name='redeem'),
     path('viewToken/<unique_token>/', views.redeemToken.as_view(), name='redeem_token'),
     path('customerWhoBoughtVariousItems/',views.CustomersWhoBoughtVariousProducts.as_view(),name='machine_learning'),
-    path('emailsWhoBoughtVariousItems/',views.EmailsOnlyWhoBoughtVariousProducts.as_view(),name='machine_learning')
+    path('emailsWhoBoughtVariousItems/',views.EmailsOnlyWhoBoughtVariousProducts.as_view(),name='machine_learning'),
+    path('getReceiptHistory/<email_slug>/',views.getReciptHistoryFromEmail.as_view(),name='get_receipt_history')
 ]
 

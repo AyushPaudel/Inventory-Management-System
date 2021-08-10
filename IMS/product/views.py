@@ -329,6 +329,32 @@ class popularCategories(APIView):
         return Response({'result': data , 'total': final_total, 'sold': final_sold})
 
 
+class getReciptHistoryFromEmail(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request, email_slug):
+        recipts = Recipt.objects.filter(email=email_slug)
+        recipt_arr = []
+        for recipt in recipts:
+            products = recipt.product.all()
+            product_arr = []
+            for product in products:
+                product_arr.append({
+                    "product_name": product.product_name,
+                    "product_max_price": product.product_max_price,
+                })
+            recipt_arr.append({
+                "recipt" : recipt.unique_token,
+                "redeemed": recipt.redeemed,
+                "quantity": recipt.quantity.split(","),
+                "purchase_price": recipt.purchase_price,
+                "products": product_arr 
+            }
+            )
+
+
+
+        return Response({"results":recipt_arr})
+
 # if customer is not registered but email was passed , you still can query them for the 
 # bought product
 class EmailsOnlyWhoBoughtVariousProducts(APIView):
