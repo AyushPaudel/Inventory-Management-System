@@ -17,9 +17,14 @@ import pandas as pd
 import numpy as np
 from gensim.models import Word2Vec
 import random
+import os
+from pathlib import Path
 
-products_df = pd.read_csv('./recommendation/ai_models/products.csv')
-model = Word2Vec.load('./recommendation/ai_models/ims_rec_model.model')
+
+cwd = Path(__file__).parent
+
+products_df = pd.read_csv(os.path.join(cwd,'ai_models/products.csv'))
+model = Word2Vec.load(os.path.join(cwd,'ai_models/ims_rec_model.model'))
 
 products_dict = products_df.groupby('product_name')['product_id'].apply(list).to_dict()
 #print(products_dict)
