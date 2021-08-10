@@ -1,0 +1,54 @@
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from ims_users.permissions import adminPermission, StaffOrAdmin , customerPermission
+
+from product.pagination import CustomPagination
+
+# For custom views:
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import serializers
+
+# Related to AI model:
+import smart_open
+smart_open.open = smart_open.smart_open
+
+import pandas as pd
+import numpy as np
+from gensim.models import Word2Vec
+
+model = Word2Vec.load('./ai_models/ims_rec_model.model')
+products = pd.read_json('./ai_models/product.json')
+
+products_dict = products.groupby('product_name')['product_name'].apply(list).to_dict()
+print(products_dict)
+
+
+#Function to obtain all the similar
+#products from the similarity vector:
+def similar_products(v, n = 30):
+    
+    # extract most similar products for the input vector
+    ms = model.similar_by_vector(v, topn= n+1)[1:]
+    
+    # extract name and similarity score of the similar products
+    new_ms = []
+    for j in ms:
+        pair = (products_dict[j[0]][0], j[1])
+        new_ms.append(pair)
+        
+    return new_ms    
+
+
+# Function to average all the vectors of the 
+# products the user has bought so far and use 
+# the resultant to find similar products:
+def aggregate_vectors(products):
+    product_vec = []
+    for i in products:
+        try:
+            product_vec.append(model[i])
+        except KeyError:
+            continue
+        
+    return np.mean(product_vec, axis=0)
