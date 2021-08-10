@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from ims_users.permissions import customerPermission
 
 from product.models import Recipt, products
+from product.serializers import productSerializer
 
 # For custom views:
 from rest_framework.views import APIView
@@ -17,10 +18,10 @@ import numpy as np
 from gensim.models import Word2Vec
 import random
 
-products = pd.read_csv('./recommendation/ai_models/products.csv')
+products_df = pd.read_csv('./recommendation/ai_models/products.csv')
 model = Word2Vec.load('./recommendation/ai_models/ims_rec_model.model')
 
-products_dict = products.groupby('product_name')['product_id'].apply(list).to_dict()
+products_dict = products_df.groupby('product_name')['product_id'].apply(list).to_dict()
 #print(products_dict)
 
 
@@ -29,7 +30,7 @@ products_dict = products.groupby('product_name')['product_id'].apply(list).to_di
 def similar_products(v, n = 30):
     # extract most similar products for the input vector
     if len(v) ==0:
-        v = products['product_name'][random.randint(0,50)] # if no buying history, generate random recommendation
+        v = products_df['product_name'][random.randint(0,50)] # if no buying history, generate random recommendation
     ms = model.wv.similar_by_vector(v, topn= n+1)[1:]
     
     # extract name and similarity score of the similar products
@@ -78,8 +79,8 @@ class recommend(APIView):
         recipts = Recipt.objects.filter(email=request.user.email)
         product_arr = []
         for recipt in recipts:
-            products = recipt.product.all()
-            for product in products:
+            recipt_products = recipt.product.all()
+            for product in recipt_products:
                 product_arr.append(
                     product.product_name
                 )
@@ -91,8 +92,11 @@ class recommend(APIView):
         product_ids = []
         for ids in filtered:
             product_ids.append(ids[0])
-            
-        return Response({'Top 10 recommended products': product_ids})
+        
+        recommended_products = products.objects.filter(pk__in=product_ids)
+        recommend_serializer = productSerializer(recommended_products, many=True)
+
+        return Response(recommend_serializer.data)
             
 
 
