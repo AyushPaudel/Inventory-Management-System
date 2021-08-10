@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #my apps:
     'ims_users',
     'product',
+    'recommendation'
 ]
 
 MIDDLEWARE = [

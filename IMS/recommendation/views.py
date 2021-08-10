@@ -1,8 +1,7 @@
-from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from ims_users.permissions import adminPermission, StaffOrAdmin , customerPermission
+from rest_framework.permissions import IsAuthenticated
+from ims_users.permissions import customerPermission
 
-from product.pagination import CustomPagination
+from product.models import Recipt, products
 
 # For custom views:
 from rest_framework.views import APIView
@@ -16,20 +15,22 @@ smart_open.open = smart_open.smart_open
 import pandas as pd
 import numpy as np
 from gensim.models import Word2Vec
+import random
 
-model = Word2Vec.load('./ai_models/ims_rec_model.model')
-products = pd.read_json('./ai_models/product.json')
+products = pd.read_csv('./recommendation/ai_models/products.csv')
+model = Word2Vec.load('./recommendation/ai_models/ims_rec_model.model')
 
-products_dict = products.groupby('product_name')['product_name'].apply(list).to_dict()
-print(products_dict)
+products_dict = products.groupby('product_name')['product_id'].apply(list).to_dict()
+#print(products_dict)
 
 
 #Function to obtain all the similar
 #products from the similarity vector:
 def similar_products(v, n = 30):
-    
     # extract most similar products for the input vector
-    ms = model.similar_by_vector(v, topn= n+1)[1:]
+    if len(v) ==0:
+        v = products['product_name'][random.randint(0,50)] # if no buying history, generate random recommendation
+    ms = model.wv.similar_by_vector(v, topn= n+1)[1:]
     
     # extract name and similarity score of the similar products
     new_ms = []
@@ -47,8 +48,51 @@ def aggregate_vectors(products):
     product_vec = []
     for i in products:
         try:
-            product_vec.append(model[i])
+            product_vec.append(model.wv[i])
         except KeyError:
-            continue
-        
+            continue  
+    if len(product_vec) == 0:
+        return product_vec 
     return np.mean(product_vec, axis=0)
+
+
+def filter_same_products(similar_prod, p_val):
+    for prod in p_val:
+        for similar in similar_prod:
+             if similar[0] == prod:
+                    similar_prod.remove(similar)
+    return similar_prod
+
+
+# p_val = ['Optical Mouse', 'samsung earphone', 'Huawei Watch 8', 'Fantech mechanical Keyboard with RGB lights.']
+# print(model)
+
+# similar_prod = similar_products(model.wv['Optical Mouse'])
+# print(similar_prod)
+
+class recommend(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+
+        # Extracting all purchased product
+        recipts = Recipt.objects.filter(email=request.user.email)
+        product_arr = []
+        for recipt in recipts:
+            products = recipt.product.all()
+            for product in products:
+                product_arr.append(
+                    product.product_name
+                )
+
+        similar_prod = similar_products(aggregate_vectors(product_arr))
+        filtered = filter_same_products(similar_prod, product_arr)
+        filtered = filtered[:10]
+  
+        product_ids = []
+        for ids in filtered:
+            product_ids.append(ids[0])
+            
+        return Response({'Top 10 recommended products': product_ids})
+            
+
+
