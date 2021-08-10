@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from ims_users.permissions import customerPermission
 
 from product.models import Recipt, products
@@ -72,11 +72,11 @@ def filter_same_products(similar_prod, p_val):
 # print(similar_prod)
 
 class recommend(APIView):
-    permission_classes = (IsAuthenticated,)
-    def get(self, request):
+    permission_classes = (AllowAny,)
+    def get(self, request,email_slug):
 
         # Extracting all purchased product
-        recipts = Recipt.objects.filter(email=request.user.email)
+        recipts = Recipt.objects.filter(email=email_slug)
         product_arr = []
         for recipt in recipts:
             recipt_products = recipt.product.all()
