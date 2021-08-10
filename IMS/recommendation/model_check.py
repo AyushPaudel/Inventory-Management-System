@@ -4,7 +4,6 @@ smart_open.open = smart_open.smart_open
 import pandas as pd
 import numpy as np
 from gensim.models import Word2Vec
-from gensim.models.Word2Vec import similar_by_vector
 
 
 products = pd.read_csv('./ai_models/products.csv')
@@ -19,7 +18,7 @@ print(products_dict)
 def similar_products(v, n = 30):
     
     # extract most similar products for the input vector
-    ms = model.similar_by_vector(v, topn= n+1)[1:]
+    ms = model.wv.similar_by_vector(v, topn= n+1)[1:]
     
     # extract name and similarity score of the similar products
     new_ms = []
@@ -46,5 +45,5 @@ def aggregate_vectors(products):
 
 p_val = ['Optical Mouse', 'samsung earphone', 'Huawei Watch 8', 'Fantech mechanical Keyboard with RGB lights.']
 print(model)
-similar_prod = similar_products(['Optical Mouse'])
+similar_prod = similar_products(model.wv['Optical Mouse'])
 print(similar_prod)
