@@ -1,5 +1,13 @@
 # Inventory-Management-System
 
+## Steps to Run
+- clone the repository : `git clone https://github.com/AyushPaudel/Inventory-Management-System.git`
+- create a virtual environment: `python -m venv VENV_FILES`
+- activate virtual environment: `./VENV_FILES/django/bin/activate`
+- install requirements: `pip install -r requirements.txt`
+- go to IMS folder: `cd IMS`
+- Run the server: `python manage.py runserver`
+
 
 ## Inventory Management System ( IMS ) Ecosystem
 
